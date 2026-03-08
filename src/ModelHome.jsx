@@ -67,7 +67,7 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
 
     const labels = {
         vi: {
-            title: '09 MO HINH TRINH DIEN',
+            title: '08 MO HINH TRINH DIEN',
             subtitle: 'Bam vao mo hinh de xem chi tiet',
             farmer: 'Nong ho',
             area: 'Dien tich',
@@ -81,7 +81,7 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
             ha: 'ha'
         },
         en: {
-            title: '09 DEMONSTRATION MODELS',
+            title: '08 DEMONSTRATION MODELS',
             subtitle: 'Click a model to view details',
             farmer: 'Farmer',
             area: 'Area',
@@ -95,7 +95,7 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
             ha: 'ha'
         },
         ede: {
-            title: '09 HDRUOM KLEI HRA',
+            title: '08 HDRUOM KLEI HRA',
             subtitle: 'Mnek hdruom kơ dlang ting',
             farmer: 'Mnuih hma',
             area: 'Prong',
@@ -122,7 +122,7 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
     }
 
     // If no models exist yet, show placeholder grid
-    const displayModels = models.length > 0 ? models : Array.from({ length: 9 }, (_, i) => ({
+    const displayModels = models.length > 0 ? models : Array.from({ length: 8 }, (_, i) => ({
         id: `placeholder-${i}`,
         model_code: `GL${String(i + 1).padStart(2, '0')}-XP`,
         model_name: `Mo hinh GL${String(i + 1).padStart(2, '0')}`,
@@ -178,7 +178,7 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
                                             {model.model_code}
                                         </div>
                                         <div style={{ fontSize: '12px', opacity: 0.9, marginTop: '2px' }}>
-                                            {model.model_name || '---'}
+                                            {model.name || model.model_name || '---'}
                                         </div>
                                     </div>
                                     <div style={{
@@ -213,13 +213,13 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
                                 </div>
 
                                 {/* Area + Location */}
-                                {(model.target_area || model.commune) && (
+                                {(model.area || model.target_area || model.location || model.commune) && (
                                     <div style={{ display: 'flex', gap: '15px', fontSize: '12px', color: '#64748b', marginBottom: '10px' }}>
-                                        {model.target_area && (
-                                            <span><i className="fas fa-ruler-combined" style={{ marginRight: '4px' }}></i>{model.target_area} {L.ha}</span>
+                                        {(model.area || model.target_area) && (
+                                            <span><i className="fas fa-ruler-combined" style={{ marginRight: '4px' }}></i>{model.area || model.target_area} {L.ha}</span>
                                         )}
-                                        {model.commune && (
-                                            <span><i className="fas fa-map-marker-alt" style={{ marginRight: '4px' }}></i>{model.commune}</span>
+                                        {(model.location || model.commune) && (
+                                            <span><i className="fas fa-map-marker-alt" style={{ marginRight: '4px' }}></i>{model.location || model.commune}</span>
                                         )}
                                     </div>
                                 )}
