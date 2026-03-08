@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import pb from './pbClient';
 import { translations } from './translations';
+import ModelReport from './ModelReport';
 import './Dashboard.css';
 
 const TABS = [
@@ -110,6 +111,7 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
     const [showFarmForm, setShowFarmForm] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
     const [saving, setSaving] = useState(false);
+    const [showReport, setShowReport] = useState(false);
 
     // Form data
     const emptyDiary = { diary_date: today(), activity_type: 'fertilize', description: '', material_name: '', material_amount: '', material_unit: 'kg', labor_hours: '', labor_cost: '', material_cost: '', gcp_compliant: false, weather: '', notes: '' };
@@ -1208,6 +1210,19 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                         <InfoRow label={appLang === 'vi' ? 'Doanh thu cà phê' : 'Coffee revenue'} value={income.coffee_revenue ? `${income.coffee_revenue} tr.đ` : null} icon="fa-mug-hot" />
                     </SectionCard>
                 )}
+
+                <button
+                    onClick={() => setShowReport(true)}
+                    style={{
+                        width: '100%', padding: '14px', borderRadius: '14px', border: 'none', cursor: 'pointer',
+                        background: 'linear-gradient(135deg, #dc2626, #ef4444)', color: 'white',
+                        fontSize: '14px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                        boxShadow: '0 4px 12px rgba(220,38,38,0.3)', marginTop: '8px'
+                    }}
+                >
+                    <i className="fas fa-file-pdf"></i>
+                    {appLang === 'vi' ? 'Xuất báo cáo PDF' : 'Export PDF Report'}
+                </button>
             </>
         );
     };
@@ -1234,6 +1249,18 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                         <span style={{ color: 'var(--coffee-primary)', fontWeight: 800 }}>{model.model_code}</span> - {model.name || model.model_name}
                     </h2>
                 </div>
+                <button
+                    onClick={() => setShowReport(true)}
+                    style={{
+                        padding: '8px 14px', borderRadius: '12px', border: 'none', cursor: 'pointer',
+                        background: 'linear-gradient(135deg, #dc2626, #ef4444)', color: 'white',
+                        fontSize: '12px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px',
+                        boxShadow: '0 2px 8px rgba(220,38,38,0.3)', whiteSpace: 'nowrap'
+                    }}
+                >
+                    <i className="fas fa-file-pdf"></i>
+                    PDF
+                </button>
                 {!canEdit && (
                     <span style={{
                         padding: '4px 12px', borderRadius: '20px', fontSize: '11px', fontWeight: 700,
@@ -1279,6 +1306,17 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
             ) : (
                 tabContent[activeTab]?.()
             )}
+
+            <ModelReport
+                show={showReport}
+                onClose={() => setShowReport(false)}
+                model={model}
+                farmer={farmer}
+                diary={diary}
+                inspections={inspections}
+                consumables={consumables}
+                appLang={appLang}
+            />
         </div>
     );
 };
