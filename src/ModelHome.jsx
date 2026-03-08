@@ -98,193 +98,153 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
                 <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>{L.subtitle}</p>
             </div>
 
-            {/* Horizontal scroll pad grid */}
-            <div style={{
-                display: 'flex',
-                flexWrap: 'nowrap',
-                overflowX: 'auto',
-                gap: '14px',
-                padding: '10px 4px 20px',
-                scrollSnapType: 'x mandatory',
-                WebkitOverflowScrolling: 'touch',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-            }}>
-                {displayModels.map((model, idx) => {
-                    const c = PAD_COLORS[idx % PAD_COLORS.length];
-                    const st = stats[model.id] || { diary: 0, inspections: 0, consumables: 0 };
-                    const farmerName = model.expand?.farmer_id?.full_name;
-                    const isPressed = pressedId === model.id;
-                    const area = model.area || model.target_area;
-                    const totalRecs = st.diary + st.inspections + st.consumables;
+            {/* Row 1: 5 models, Row 2: 3 models centered */}
+            {[displayModels.slice(0, 5), displayModels.slice(5)].map((row, rowIdx) => (
+                <div key={rowIdx} style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '10px',
+                    marginBottom: rowIdx === 0 ? '14px' : '20px',
+                    flexWrap: 'nowrap',
+                    padding: '4px 0',
+                }}>
+                    {row.map((model, idx) => {
+                        const realIdx = rowIdx * 5 + idx;
+                        const c = PAD_COLORS[realIdx % PAD_COLORS.length];
+                        const st = stats[model.id] || { diary: 0, inspections: 0, consumables: 0 };
+                        const farmerName = model.expand?.farmer_id?.full_name;
+                        const isPressed = pressedId === model.id;
+                        const area = model.area || model.target_area;
 
-                    return (
-                        <div
-                            key={model.id}
-                            onClick={() => !model._placeholder && onSelectModel(model)}
-                            onMouseEnter={() => setPressedId(model.id)}
-                            onMouseLeave={() => setPressedId(null)}
-                            onTouchStart={() => setPressedId(model.id)}
-                            onTouchEnd={() => setTimeout(() => setPressedId(null), 500)}
-                            style={{
-                                flex: '0 0 auto',
-                                width: '155px',
-                                scrollSnapAlign: 'start',
-                                cursor: model._placeholder ? 'default' : 'pointer',
-                                opacity: model._placeholder ? 0.4 : 1,
-                                perspective: '600px',
-                            }}
-                        >
-                            {/* 3D Pad */}
-                            <div style={{
-                                width: '155px',
-                                minHeight: '180px',
-                                borderRadius: '18px',
-                                background: `linear-gradient(145deg, ${c.bg}, ${c.light})`,
-                                position: 'relative',
-                                overflow: 'hidden',
-                                transition: 'all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                                transform: isPressed
-                                    ? 'translateY(-8px) rotateX(5deg) scale(1.05)'
-                                    : 'translateY(0) rotateX(0) scale(1)',
-                                transformStyle: 'preserve-3d',
-                                boxShadow: isPressed
-                                    ? `0 18px 35px ${c.glow}, 0 6px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2)`
-                                    : `0 6px 18px ${c.glow}, 0 2px 6px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.15)`,
-                            }}>
-                                {/* 3D top shine */}
+                        return (
+                            <div
+                                key={model.id}
+                                onClick={() => !model._placeholder && onSelectModel(model)}
+                                onMouseEnter={() => setPressedId(model.id)}
+                                onMouseLeave={() => setPressedId(null)}
+                                onTouchStart={() => setPressedId(model.id)}
+                                onTouchEnd={() => setTimeout(() => setPressedId(null), 500)}
+                                style={{
+                                    flex: '0 0 auto',
+                                    width: 'calc((100% - 40px) / 5)',
+                                    minWidth: '62px',
+                                    maxWidth: '130px',
+                                    cursor: model._placeholder ? 'default' : 'pointer',
+                                    opacity: model._placeholder ? 0.4 : 1,
+                                    perspective: '500px',
+                                }}
+                            >
+                                {/* 3D Pad */}
                                 <div style={{
-                                    position: 'absolute', top: 0, left: 0, right: 0, height: '50%',
-                                    background: 'linear-gradient(180deg, rgba(255,255,255,0.18) 0%, transparent 100%)',
-                                    borderRadius: '18px 18px 0 0',
-                                    pointerEvents: 'none',
-                                }}></div>
-
-                                {/* Bottom edge shadow (3D depth) */}
-                                <div style={{
-                                    position: 'absolute', bottom: 0, left: 0, right: 0, height: '6px',
-                                    background: 'rgba(0,0,0,0.15)',
-                                    borderRadius: '0 0 18px 18px',
-                                    pointerEvents: 'none',
-                                }}></div>
-
-                                {/* Content */}
-                                <div style={{
-                                    position: 'relative', zIndex: 1,
-                                    padding: '14px 12px 12px',
-                                    display: 'flex', flexDirection: 'column',
-                                    minHeight: '180px',
-                                    color: 'white',
+                                    width: '100%',
+                                    aspectRatio: '1',
+                                    borderRadius: '16px',
+                                    background: `linear-gradient(145deg, ${c.bg}, ${c.light})`,
+                                    position: 'relative',
+                                    overflow: 'hidden',
+                                    transition: 'all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                                    transform: isPressed
+                                        ? 'translateY(-6px) rotateX(4deg) scale(1.06)'
+                                        : 'translateY(0) rotateX(0) scale(1)',
+                                    transformStyle: 'preserve-3d',
+                                    boxShadow: isPressed
+                                        ? `0 14px 28px ${c.glow}, 0 4px 10px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.2)`
+                                        : `0 4px 14px ${c.glow}, 0 2px 4px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.15)`,
                                 }}>
-                                    {/* Model code - big & bold */}
+                                    {/* 3D top shine */}
                                     <div style={{
-                                        fontSize: '22px', fontWeight: 900,
-                                        letterSpacing: '1px',
-                                        textShadow: '0 2px 4px rgba(0,0,0,0.3)',
-                                        marginBottom: '2px',
-                                    }}>
-                                        {model.model_code?.replace('-XP', '') || '---'}
-                                    </div>
+                                        position: 'absolute', top: 0, left: 0, right: 0, height: '45%',
+                                        background: 'linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%)',
+                                        borderRadius: '16px 16px 0 0',
+                                        pointerEvents: 'none',
+                                    }}></div>
 
-                                    {/* Model name */}
+                                    {/* Bottom edge */}
                                     <div style={{
-                                        fontSize: '10px', opacity: 0.85,
-                                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                                        marginBottom: '10px',
-                                    }}>
-                                        {model.name || model.model_name || '---'}
-                                    </div>
+                                        position: 'absolute', bottom: 0, left: 0, right: 0, height: '5px',
+                                        background: 'rgba(0,0,0,0.12)',
+                                        borderRadius: '0 0 16px 16px',
+                                        pointerEvents: 'none',
+                                    }}></div>
 
-                                    {/* Farmer */}
+                                    {/* Content */}
                                     <div style={{
-                                        fontSize: '11px', fontWeight: 600,
-                                        display: 'flex', alignItems: 'center', gap: '5px',
-                                        marginBottom: '4px',
-                                        opacity: farmerName ? 1 : 0.6,
+                                        position: 'relative', zIndex: 1,
+                                        padding: '8px 6px 6px',
+                                        display: 'flex', flexDirection: 'column',
+                                        height: '100%',
+                                        color: 'white',
+                                        boxSizing: 'border-box',
                                     }}>
-                                        <i className="fas fa-user" style={{ fontSize: '9px' }}></i>
-                                        <span style={{
-                                            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                                            maxWidth: '120px',
-                                        }}>
-                                            {farmerName || L.no_farmer}
-                                        </span>
-                                    </div>
-
-                                    {/* Area */}
-                                    {area && (
-                                        <div style={{ fontSize: '10px', opacity: 0.8, marginBottom: '4px' }}>
-                                            <i className="fas fa-ruler-combined" style={{ fontSize: '8px', marginRight: '4px' }}></i>
-                                            {area} {L.ha}
-                                        </div>
-                                    )}
-
-                                    {/* Location */}
-                                    {(model.location || model.commune) && (
+                                        {/* Model code */}
                                         <div style={{
-                                            fontSize: '9px', opacity: 0.7,
+                                            fontSize: '15px', fontWeight: 900,
+                                            letterSpacing: '0.5px',
+                                            textShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                                            lineHeight: 1.1,
+                                        }}>
+                                            {model.model_code?.replace('-XP', '') || '---'}
+                                        </div>
+
+                                        {/* Farmer name */}
+                                        <div style={{
+                                            fontSize: '8px', fontWeight: 600,
+                                            marginTop: '3px',
+                                            opacity: farmerName ? 0.95 : 0.5,
                                             whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                                         }}>
-                                            <i className="fas fa-map-marker-alt" style={{ fontSize: '8px', marginRight: '3px' }}></i>
-                                            {model.location || model.commune}
+                                            <i className="fas fa-user" style={{ fontSize: '7px', marginRight: '2px' }}></i>
+                                            {farmerName ? farmerName.split(' ').slice(-2).join(' ') : '---'}
                                         </div>
-                                    )}
 
-                                    {/* Spacer */}
-                                    <div style={{ flex: 1 }}></div>
+                                        {/* Area */}
+                                        {area && (
+                                            <div style={{ fontSize: '8px', opacity: 0.75, marginTop: '1px' }}>
+                                                {area} {L.ha}
+                                            </div>
+                                        )}
 
-                                    {/* Stats row at bottom */}
-                                    {!model._placeholder && (
-                                        <div style={{
-                                            display: 'flex', gap: '4px', marginTop: '8px',
-                                        }}>
+                                        <div style={{ flex: 1 }}></div>
+
+                                        {/* Stats mini */}
+                                        {!model._placeholder && (
                                             <div style={{
-                                                flex: 1, textAlign: 'center',
-                                                background: 'rgba(255,255,255,0.18)',
-                                                borderRadius: '8px',
-                                                padding: '5px 2px',
-                                                backdropFilter: 'blur(4px)',
+                                                display: 'flex', gap: '2px',
+                                                marginTop: '4px',
                                             }}>
-                                                <div style={{ fontSize: '14px', fontWeight: 800 }}>{st.diary}</div>
-                                                <div style={{ fontSize: '7px', fontWeight: 600, opacity: 0.8 }}>{L.diary}</div>
+                                                {[
+                                                    { val: st.diary, label: L.diary },
+                                                    { val: st.inspections, label: L.inspections },
+                                                    { val: st.consumables, label: L.costs },
+                                                ].map((s, i) => (
+                                                    <div key={i} style={{
+                                                        flex: 1, textAlign: 'center',
+                                                        background: 'rgba(255,255,255,0.18)',
+                                                        borderRadius: '6px',
+                                                        padding: '3px 1px',
+                                                    }}>
+                                                        <div style={{ fontSize: '11px', fontWeight: 800, lineHeight: 1 }}>{s.val}</div>
+                                                        <div style={{ fontSize: '5px', fontWeight: 600, opacity: 0.7, marginTop: '1px' }}>{s.label}</div>
+                                                    </div>
+                                                ))}
                                             </div>
-                                            <div style={{
-                                                flex: 1, textAlign: 'center',
-                                                background: 'rgba(255,255,255,0.18)',
-                                                borderRadius: '8px',
-                                                padding: '5px 2px',
-                                                backdropFilter: 'blur(4px)',
-                                            }}>
-                                                <div style={{ fontSize: '14px', fontWeight: 800 }}>{st.inspections}</div>
-                                                <div style={{ fontSize: '7px', fontWeight: 600, opacity: 0.8 }}>{L.inspections}</div>
-                                            </div>
-                                            <div style={{
-                                                flex: 1, textAlign: 'center',
-                                                background: 'rgba(255,255,255,0.18)',
-                                                borderRadius: '8px',
-                                                padding: '5px 2px',
-                                                backdropFilter: 'blur(4px)',
-                                            }}>
-                                                <div style={{ fontSize: '14px', fontWeight: 800 }}>{st.consumables}</div>
-                                                <div style={{ fontSize: '7px', fontWeight: 600, opacity: 0.8 }}>{L.costs}</div>
-                                            </div>
-                                        </div>
-                                    )}
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Ground shadow */}
-                            <div style={{
-                                width: '80%', height: '8px', margin: '4px auto 0',
-                                background: `radial-gradient(ellipse, ${c.glow} 0%, transparent 70%)`,
-                                borderRadius: '50%',
-                                opacity: isPressed ? 0.3 : 0.6,
-                                transition: 'opacity 0.3s',
-                            }}></div>
-                        </div>
-                    );
-                })}
-            </div>
+                                {/* Ground shadow */}
+                                <div style={{
+                                    width: '75%', height: '6px', margin: '3px auto 0',
+                                    background: `radial-gradient(ellipse, ${c.glow} 0%, transparent 70%)`,
+                                    borderRadius: '50%',
+                                    opacity: isPressed ? 0.3 : 0.5,
+                                    transition: 'opacity 0.3s',
+                                }}></div>
+                            </div>
+                        );
+                    })}
+                </div>
+            ))}
 
             {/* Quick access buttons */}
             <div style={{
