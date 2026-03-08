@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { FontRegular, FontBold } from './fonts/roboto-base64';
+import { FontRegular, FontBold } from './fonts/roboto-base64'; // Tinos (Times New Roman compatible)
 
 // Label maps with 3 languages: vi, en, ede
 const ACTIVITY_LABELS = {
@@ -315,12 +315,12 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             const contentW = pageW - margin * 2;
             let y = margin;
 
-            // Register Roboto font for Vietnamese diacritics
-            doc.addFileToVFS('Roboto-Regular.ttf', FontRegular);
-            doc.addFont('Roboto-Regular.ttf', 'Roboto', 'normal');
-            doc.addFileToVFS('Roboto-Bold.ttf', FontBold);
-            doc.addFont('Roboto-Bold.ttf', 'Roboto', 'bold');
-            doc.setFont('Roboto');
+            // Register Tinos font (Times New Roman compatible, Vietnamese support)
+            doc.addFileToVFS('Tinos-Regular.ttf', FontRegular);
+            doc.addFont('Tinos-Regular.ttf', 'Times', 'normal');
+            doc.addFileToVFS('Tinos-Bold.ttf', FontBold);
+            doc.addFont('Tinos-Bold.ttf', 'Times', 'bold');
+            doc.setFont('Times');
 
             // --- HEADER: Logo centered at top, 1/4 page width ---
             let logoResult = null;
@@ -338,23 +338,23 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             }
 
             // Title - centered below logo
-            doc.setFontSize(16);
-            doc.setFont('Roboto', 'bold');
+            doc.setFontSize(14);
+            doc.setFont('Times', 'bold');
             doc.text(P.reportTitle, pageW / 2, y, { align: 'center' });
             y += 6;
-            doc.setFontSize(10);
+            doc.setFontSize(12);
             doc.text(P.reportSubtitle, pageW / 2, y, { align: 'center' });
-            y += 5;
+            y += 6;
 
             // Sponsor line
-            doc.setFontSize(8);
-            doc.setFont('Roboto', 'normal');
+            doc.setFontSize(11);
+            doc.setFont('Times', 'normal');
             doc.text(P.sponsor, pageW / 2, y, { align: 'center' });
             y += 8;
 
             // Model info - left aligned
-            doc.setFontSize(9);
-            doc.setFont('Roboto', 'normal');
+            doc.setFontSize(11);
+            doc.setFont('Times', 'normal');
             const infoPairs = [
                 [P.modelCode, model.model_code || ''],
                 [P.name, model.name || model.model_name || ''],
@@ -367,10 +367,10 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             infoPairs.push([P.period, `${fmtDate(dateFrom, lang)} - ${fmtDate(dateTo, lang)}`]);
 
             infoPairs.forEach(([label, val]) => {
-                doc.setFont('Roboto', 'bold');
+                doc.setFont('Times', 'bold');
                 doc.text(`${label}: `, margin, y);
                 const labelW = doc.getTextWidth(`${label}: `);
-                doc.setFont('Roboto', 'normal');
+                doc.setFont('Times', 'normal');
                 doc.text(val, margin + labelW, y);
                 y += 5;
             });
@@ -400,21 +400,21 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             if (includeDiary) {
                 sectionNum++;
                 ensureSpace(20);
-                doc.setFontSize(11);
-                doc.setFont('Roboto', 'bold');
+                doc.setFontSize(12);
+                doc.setFont('Times', 'bold');
                 doc.text(`${sectionNum}. ${P.diaryTitle} (${diaryData.length})`, margin, y);
                 y += 3;
 
                 if (diaryData.length === 0) {
-                    doc.setFontSize(9);
-                    doc.setFont('Roboto', 'normal');
+                    doc.setFontSize(11);
+                    doc.setFont('Times', 'normal');
                     doc.text(P.noData, margin + 5, y + 5);
                     y += 10;
                 } else {
                     autoTable(doc, {
                         startY: y,
                         margin: { left: margin, right: margin },
-                        styles: { fontSize: 7, cellPadding: 2, font: 'Roboto' },
+                        styles: { fontSize: 9, cellPadding: 2, font: 'Times' },
                         headStyles: { fillColor: [93, 64, 55], textColor: 255, fontStyle: 'bold' },
                         head: [[P.date, P.activity, P.description, P.material, P.qty, P.laborCost, P.matCost, P.gcp]],
                         body: diaryData.map(d => [
@@ -442,8 +442,8 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
 
                     const diaryLaborTotal = diaryData.reduce((s, d) => s + (d.labor_cost || 0), 0);
                     const diaryMatTotal = diaryData.reduce((s, d) => s + (d.material_cost || 0), 0);
-                    doc.setFontSize(8);
-                    doc.setFont('Roboto', 'bold');
+                    doc.setFontSize(10);
+                    doc.setFont('Times', 'bold');
                     doc.text(`${P.totalLabor}: ${fmtNum(diaryLaborTotal)} | ${P.totalMat}: ${fmtNum(diaryMatTotal)} | ${P.totalAll}: ${fmtNum(diaryLaborTotal + diaryMatTotal)} VND`, margin + 5, y);
                     y += 8;
                 }
@@ -453,21 +453,21 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             if (includeInspect) {
                 sectionNum++;
                 ensureSpace(20);
-                doc.setFontSize(11);
-                doc.setFont('Roboto', 'bold');
+                doc.setFontSize(12);
+                doc.setFont('Times', 'bold');
                 doc.text(`${sectionNum}. ${P.inspectTitle} (${inspectData.length})`, margin, y);
                 y += 3;
 
                 if (inspectData.length === 0) {
-                    doc.setFontSize(9);
-                    doc.setFont('Roboto', 'normal');
+                    doc.setFontSize(11);
+                    doc.setFont('Times', 'normal');
                     doc.text(P.noData, margin + 5, y + 5);
                     y += 10;
                 } else {
                     autoTable(doc, {
                         startY: y,
                         margin: { left: margin, right: margin },
-                        styles: { fontSize: 7, cellPadding: 2, font: 'Roboto' },
+                        styles: { fontSize: 9, cellPadding: 2, font: 'Times' },
                         headStyles: { fillColor: [30, 64, 175], textColor: 255, fontStyle: 'bold' },
                         head: [[P.date, P.type, P.growth, P.pests, P.soil, P.water, P.healthPct, P.recomm]],
                         body: inspectData.map(i => [
@@ -494,21 +494,21 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             if (includeConsum) {
                 sectionNum++;
                 ensureSpace(20);
-                doc.setFontSize(11);
-                doc.setFont('Roboto', 'bold');
+                doc.setFontSize(12);
+                doc.setFont('Times', 'bold');
                 doc.text(`${sectionNum}. ${P.consumTitle} (${consumData.length})`, margin, y);
                 y += 3;
 
                 if (consumData.length === 0) {
-                    doc.setFontSize(9);
-                    doc.setFont('Roboto', 'normal');
+                    doc.setFontSize(11);
+                    doc.setFont('Times', 'normal');
                     doc.text(P.noData, margin + 5, y + 5);
                     y += 10;
                 } else {
                     autoTable(doc, {
                         startY: y,
                         margin: { left: margin, right: margin },
-                        styles: { fontSize: 7, cellPadding: 2, font: 'Roboto' },
+                        styles: { fontSize: 9, cellPadding: 2, font: 'Times' },
                         headStyles: { fillColor: [133, 77, 14], textColor: 255, fontStyle: 'bold' },
                         head: [[P.date, P.category, P.item, P.qty, P.unit, P.price, P.total, P.notes]],
                         body: consumData.map(c => [
@@ -544,7 +544,7 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
 
                     ensureSpace(40);
                     doc.setFontSize(11);
-                    doc.setFont('Roboto', 'bold');
+                    doc.setFont('Times', 'bold');
                     doc.text(P.costSummary, margin, y + 6);
                     y += 9;
 
@@ -560,7 +560,7 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                     autoTable(doc, {
                         startY: y,
                         margin: { left: margin + 20, right: margin + 20 },
-                        styles: { fontSize: 9, cellPadding: 3, font: 'Roboto' },
+                        styles: { fontSize: 10, cellPadding: 3, font: 'Times' },
                         headStyles: { fillColor: [46, 125, 50], textColor: 255 },
                         head: [[P.catCol, P.amountCol]],
                         body: summaryRows,
@@ -596,27 +596,27 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                 const x = margin + i * colW;
                 const centerX = x + colW / 2;
 
-                doc.setFontSize(9);
-                doc.setFont('Roboto', 'bold');
+                doc.setFontSize(11);
+                doc.setFont('Times', 'bold');
                 doc.text(col.title, centerX, y, { align: 'center' });
 
-                doc.setFontSize(8);
-                doc.setFont('Roboto', 'normal');
+                doc.setFontSize(10);
+                doc.setFont('Times', 'normal');
                 doc.text(`(${P.sigNote})`, centerX, y + 5, { align: 'center' });
 
                 doc.setLineWidth(0.2);
                 doc.line(x + 10, y + 22, x + colW - 10, y + 22);
 
                 if (col.name) {
-                    doc.setFont('Roboto', 'normal');
-                    doc.setFontSize(8);
+                    doc.setFont('Times', 'normal');
+                    doc.setFontSize(10);
                     doc.text(col.name, centerX, y + 27, { align: 'center' });
                 }
             });
 
             // Footer
-            doc.setFontSize(7);
-            doc.setFont('Roboto', 'normal');
+            doc.setFontSize(9);
+            doc.setFont('Times', 'normal');
             doc.setTextColor(150, 150, 150);
             doc.text(P.footer, pageW / 2, pageH - 8, { align: 'center' });
             doc.setTextColor(0, 0, 0);
