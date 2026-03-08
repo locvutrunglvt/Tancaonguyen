@@ -1185,6 +1185,138 @@ h3 {
     }
 }
 
+/* ============= MODEL HOME CARD GRID ============= */
+.model-card-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 30px;
+    perspective: 1200px;
+}
+
+@media (max-width: 1200px) {
+    .model-card-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .model-card-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .model-card-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .model-card-grid .model-card {
+        border-radius: 14px !important;
+    }
+
+    .model-card-grid .model-card-header {
+        padding: 10px 12px !important;
+    }
+
+    .model-card-grid .model-card-header .model-code {
+        font-size: 13px !important;
+    }
+
+    .model-card-grid .model-card-header .model-name {
+        font-size: 10px !important;
+    }
+
+    .model-card-grid .model-card-header .status-badge {
+        font-size: 8px !important;
+        padding: 3px 6px !important;
+    }
+
+    .model-card-grid .model-card-body {
+        padding: 8px 12px !important;
+    }
+
+    .model-card-grid .model-card-body .farmer-name {
+        font-size: 11px !important;
+    }
+
+    .model-card-grid .model-card-body .location-info {
+        font-size: 10px !important;
+    }
+
+    .model-card-grid .model-card-body .stat-number {
+        font-size: 13px !important;
+    }
+
+    .model-card-grid .model-card-body .stat-label {
+        font-size: 7px !important;
+    }
+
+    .model-card-grid .model-card-body .stat-box {
+        padding: 4px 2px !important;
+    }
+
+    /* Hide YOURS/VIEW badges on small cards */
+    .model-card-grid .model-card .owner-badge,
+    .model-card-grid .model-card .viewer-badge {
+        display: none !important;
+    }
+
+    /* Disable 3D perspective on mobile */
+    .model-card-grid {
+        perspective: none !important;
+    }
+
+    /* Quick access section mobile */
+    .model-quick-access {
+        padding: 14px !important;
+        border-radius: 14px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .model-quick-access .quick-btn-group {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    .model-quick-access .quick-btn-group button {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    /* Title section mobile */
+    .model-home-title h2 {
+        font-size: 14px !important;
+        letter-spacing: 1px !important;
+    }
+
+    .model-home-title p {
+        font-size: 10px !important;
+    }
+}
+
+@media (max-width: 400px) {
+    .model-card-grid {
+        gap: 8px;
+    }
+
+    .model-card-grid .model-card-header {
+        padding: 8px 10px !important;
+    }
+
+    .model-card-grid .model-card-header .model-code {
+        font-size: 12px !important;
+    }
+
+    .model-card-grid .model-card-body {
+        padding: 6px 10px !important;
+    }
+}
+
 .dashboard-footer-branding {
     text-align: right;
     /* Default to right for PC */

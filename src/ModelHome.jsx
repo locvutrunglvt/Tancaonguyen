@@ -92,7 +92,7 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
     return (
         <div className="home-container">
             {/* Title */}
-            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+            <div className="model-home-title" style={{ textAlign: 'center', marginBottom: '20px' }}>
                 <h2 style={{
                     fontSize: '17px', fontWeight: 900, color: 'var(--coffee-dark)',
                     letterSpacing: '2px', margin: 0, textTransform: 'uppercase'
@@ -100,14 +100,8 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
                 <p style={{ fontSize: '12px', color: 'var(--gray-700)', opacity: 0.6, marginTop: '4px' }}>{L.subtitle}</p>
             </div>
 
-            {/* 3D Card Grid - 5 per row */}
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(5, 1fr)',
-                gap: '16px',
-                marginBottom: '30px',
-                perspective: '1200px',
-            }}>
+            {/* 3D Card Grid - responsive via CSS */}
+            <div className="model-card-grid">
                 {displayModels.map((model, idx) => {
                     const grad = cardGradients[idx % cardGradients.length];
                     const sc = STATUS_COLORS[model.status] || STATUS_COLORS.planning;
@@ -124,6 +118,7 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
                     return (
                         <div
                             key={model.id}
+                            className="model-card"
                             onClick={() => !model._placeholder && onSelectModel(model)}
                             onMouseEnter={() => setPressedId(model.id)}
                             onMouseLeave={() => setPressedId(null)}
@@ -147,7 +142,7 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
                             }}
                         >
                             {/* Header bar with gradient + 3D shine */}
-                            <div style={{
+                            <div className="model-card-header" style={{
                                 background: `linear-gradient(135deg, ${grad.from}, ${grad.to})`,
                                 padding: '14px 16px',
                                 color: 'white',
@@ -162,17 +157,17 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
                                 }}></div>
 
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 1 }}>
-                                    <div>
-                                        <div style={{ fontSize: '16px', fontWeight: 900, letterSpacing: '1px', textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
+                                    <div style={{ minWidth: 0, flex: 1 }}>
+                                        <div className="model-code" style={{ fontSize: '16px', fontWeight: 900, letterSpacing: '1px', textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
                                             {model.model_code}
                                         </div>
-                                        <div style={{ fontSize: '11px', opacity: 0.9, marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                        <div className="model-name" style={{ fontSize: '11px', opacity: 0.9, marginTop: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                             {model.name || model.model_name || '---'}
                                         </div>
                                     </div>
-                                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', gap: '4px', alignItems: 'center', flexShrink: 0 }}>
                                         {isMyModel && (
-                                            <div style={{
+                                            <div className="owner-badge" style={{
                                                 padding: '4px 8px', borderRadius: '20px',
                                                 background: 'var(--gold-accent)', color: '#fff',
                                                 fontSize: '9px', fontWeight: 800
@@ -182,7 +177,7 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
                                             </div>
                                         )}
                                         {isOtherFarmerModel && (
-                                            <div style={{
+                                            <div className="viewer-badge" style={{
                                                 padding: '4px 8px', borderRadius: '20px',
                                                 background: 'rgba(255,255,255,0.3)',
                                                 fontSize: '9px', fontWeight: 600
@@ -191,7 +186,7 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
                                                 {appLang === 'vi' ? 'XEM' : 'VIEW'}
                                             </div>
                                         )}
-                                        <div style={{
+                                        <div className="status-badge" style={{
                                             padding: '4px 10px', borderRadius: '20px',
                                             background: 'rgba(255,255,255,0.2)',
                                             backdropFilter: 'blur(4px)',
@@ -205,23 +200,23 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
                             </div>
 
                             {/* Body */}
-                            <div style={{ padding: '12px 16px' }}>
+                            <div className="model-card-body" style={{ padding: '12px 16px' }}>
                                 {/* Farmer info */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-                                    <i className="fas fa-user" style={{ color: grad.from, width: '16px' }}></i>
-                                    <span style={{ fontSize: '13px', fontWeight: 600, color: farmerName ? 'var(--coffee-dark)' : 'var(--gray-300)' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                                    <i className="fas fa-user" style={{ color: grad.from, width: '14px', fontSize: '12px' }}></i>
+                                    <span className="farmer-name" style={{ fontSize: '13px', fontWeight: 600, color: farmerName ? 'var(--coffee-dark)' : 'var(--gray-300)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                         {farmerName || L.no_farmer}
                                     </span>
                                 </div>
 
                                 {/* Area + Location */}
                                 {(area || village || commune) && (
-                                    <div style={{ display: 'flex', gap: '15px', fontSize: '12px', color: 'var(--gray-700)', marginBottom: '10px', flexWrap: 'wrap' }}>
+                                    <div className="location-info" style={{ display: 'flex', gap: '10px', fontSize: '12px', color: 'var(--gray-700)', marginBottom: '8px', flexWrap: 'wrap' }}>
                                         {area && (
-                                            <span><i className="fas fa-ruler-combined" style={{ marginRight: '4px', color: grad.from }}></i>{area} {L.ha}</span>
+                                            <span><i className="fas fa-ruler-combined" style={{ marginRight: '4px', color: grad.from, fontSize: '10px' }}></i>{area} {L.ha}</span>
                                         )}
                                         {(village || commune) && (
-                                            <span><i className="fas fa-map-marker-alt" style={{ marginRight: '4px', color: grad.from }}></i>
+                                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}><i className="fas fa-map-marker-alt" style={{ marginRight: '4px', color: grad.from, fontSize: '10px' }}></i>
                                                 {village && commune ? `${village}, ${commune}` : village || commune}
                                             </span>
                                         )}
@@ -231,35 +226,35 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
                                 {/* Quick stats - theme-aware */}
                                 {!model._placeholder && (
                                     <div style={{
-                                        display: 'flex', gap: '8px', marginTop: '12px',
-                                        paddingTop: '12px', borderTop: '1px solid var(--gray-200)'
+                                        display: 'flex', gap: '6px', marginTop: '10px',
+                                        paddingTop: '10px', borderTop: '1px solid var(--gray-200)'
                                     }}>
-                                        <div style={{
+                                        <div className="stat-box" style={{
                                             flex: 1, textAlign: 'center', padding: '6px 4px',
                                             background: `linear-gradient(to bottom, var(--cream-light), var(--cream))`,
                                             borderRadius: '8px',
                                             boxShadow: 'inset 0 -2px 4px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06)',
                                         }}>
-                                            <div style={{ fontSize: '15px', fontWeight: 800, color: grad.from }}>{st.diary}</div>
-                                            <div style={{ fontSize: '8px', color: 'var(--coffee-medium)', fontWeight: 600 }}>{L.diary}</div>
+                                            <div className="stat-number" style={{ fontSize: '15px', fontWeight: 800, color: grad.from }}>{st.diary}</div>
+                                            <div className="stat-label" style={{ fontSize: '8px', color: 'var(--coffee-medium)', fontWeight: 600 }}>{L.diary}</div>
                                         </div>
-                                        <div style={{
+                                        <div className="stat-box" style={{
                                             flex: 1, textAlign: 'center', padding: '6px 4px',
                                             background: `linear-gradient(to bottom, var(--cream-light), var(--cream))`,
                                             borderRadius: '8px',
                                             boxShadow: 'inset 0 -2px 4px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06)',
                                         }}>
-                                            <div style={{ fontSize: '15px', fontWeight: 800, color: grad.from }}>{st.inspections}</div>
-                                            <div style={{ fontSize: '8px', color: 'var(--coffee-medium)', fontWeight: 600 }}>{L.inspections}</div>
+                                            <div className="stat-number" style={{ fontSize: '15px', fontWeight: 800, color: grad.from }}>{st.inspections}</div>
+                                            <div className="stat-label" style={{ fontSize: '8px', color: 'var(--coffee-medium)', fontWeight: 600 }}>{L.inspections}</div>
                                         </div>
-                                        <div style={{
+                                        <div className="stat-box" style={{
                                             flex: 1, textAlign: 'center', padding: '6px 4px',
                                             background: `linear-gradient(to bottom, var(--cream-light), var(--cream))`,
                                             borderRadius: '8px',
                                             boxShadow: 'inset 0 -2px 4px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06)',
                                         }}>
-                                            <div style={{ fontSize: '15px', fontWeight: 800, color: grad.from }}>{st.consumables}</div>
-                                            <div style={{ fontSize: '8px', color: 'var(--coffee-medium)', fontWeight: 600 }}>{L.costs}</div>
+                                            <div className="stat-number" style={{ fontSize: '15px', fontWeight: 800, color: grad.from }}>{st.consumables}</div>
+                                            <div className="stat-label" style={{ fontSize: '8px', color: 'var(--coffee-medium)', fontWeight: 600 }}>{L.costs}</div>
                                         </div>
                                     </div>
                                 )}
@@ -270,14 +265,14 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
             </div>
 
             {/* Quick access buttons */}
-            <div style={{
+            <div className="model-quick-access" style={{
                 background: 'var(--white, #fff)', borderRadius: '20px', padding: '20px',
                 boxShadow: '0 4px 15px rgba(0,0,0,0.04)', marginBottom: '20px'
             }}>
                 <h4 style={{ fontSize: '12px', color: 'var(--gray-700)', fontWeight: 700, marginBottom: '12px', textTransform: 'uppercase' }}>
                     {L.manage_all}
                 </h4>
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <div className="quick-btn-group" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                     <button onClick={() => onNavigate('farmers')} className="btn-primary" style={{ fontSize: '13px', padding: '8px 16px' }}>
                         <i className="fas fa-id-card" style={{ marginRight: '6px' }}></i>{L.all_farmers}
                     </button>
