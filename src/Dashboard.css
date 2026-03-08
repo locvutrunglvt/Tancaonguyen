@@ -3,17 +3,17 @@
 
 :root {
     /* Coffee Theme - Refined Parchment & Coffee Palette */
-    --coffee-primary: #A67C52;
-    --coffee-dark: #4B3621;
-    --coffee-medium: #8D6E63;
-    --coffee-light: #E0C9A6;
-    --cream: #F2E7D5;
-    --cream-light: #F9F3E8;
+    --coffee-primary: #8D6E63;
+    --coffee-dark: #4E342E;
+    --coffee-medium: #795548;
+    --coffee-light: #D7CCC8;
+    --cream: #EFEBE9;
+    --cream-light: #FAF6F3;
 
     /* Accents */
-    --green-accent: #6B8E23;
-    --gold-accent: #D4AF37;
-    --gold-light: #F0E68C;
+    --green-accent: #7CB342;
+    --gold-accent: #C49A6C;
+    --gold-light: #E8D5B7;
 
     /* Neutrals */
     --white: #FFFFFF;
@@ -150,7 +150,7 @@ body {
 .nav-item.active {
     background: linear-gradient(135deg, var(--coffee-primary) 0%, var(--coffee-medium) 100%);
     color: white;
-    box-shadow: 0 4px 12px rgba(255, 179, 0, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     font-weight: 700;
 }
 
@@ -1210,4 +1210,59 @@ h3 {
         padding-bottom: 20px;
         /* Space for bottom nav */
     }
+}
+
+/* ============= DARK THEME SUPPORT ============= */
+.theme-dark body,
+.theme-dark .dashboard-layout {
+    color: var(--gray-900);
+}
+
+.theme-dark .sidebar {
+    background: linear-gradient(180deg, var(--cream) 0%, var(--coffee-light) 100%);
+    border-right-color: var(--gray-200);
+}
+
+.theme-dark .menu-card,
+.theme-dark .data-table-container,
+.theme-dark .form-container,
+.theme-dark .modal-content {
+    background: var(--white, #1E1E36);
+    color: var(--gray-900);
+}
+
+.theme-dark .pro-table tbody tr:nth-child(even),
+.theme-dark .data-table tbody tr:nth-child(even) {
+    background: var(--gray-50);
+}
+
+.theme-dark .pro-table tbody tr:hover,
+.theme-dark .data-table tbody tr:hover {
+    background: var(--cream);
+}
+
+.theme-dark .mobile-bottom-nav {
+    background: var(--cream);
+}
+
+.theme-dark .form-group input,
+.theme-dark .form-group select,
+.theme-dark .form-group textarea,
+.theme-dark .input-pro {
+    background: var(--gray-50);
+    color: var(--gray-900);
+    border-color: var(--gray-200);
+}
+
+/* ============= THEME TRANSITION SMOOTHNESS ============= */
+.dashboard-layout,
+.sidebar,
+.main-content,
+.nav-item,
+.menu-card,
+.data-table-container,
+.btn-primary,
+.btn-back,
+.btn-add-user {
+    transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
 }
