@@ -1,47 +1,47 @@
 import React, { useState } from 'react';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
-// Reuse label maps from ModelDetailView
+// Label maps with 3 languages: vi, en, ede
 const ACTIVITY_LABELS = {
-    fertilize: { vi: 'Bón phân', en: 'Fertilize' },
-    pesticide: { vi: 'Phun thuốc', en: 'Pesticide' },
-    irrigate: { vi: 'Tưới nước', en: 'Irrigate' },
-    prune: { vi: 'Tỉa cành', en: 'Prune' },
-    weed: { vi: 'Làm cỏ', en: 'Weed' },
-    harvest: { vi: 'Thu hoạch', en: 'Harvest' },
-    transport: { vi: 'Vận chuyển', en: 'Transport' },
-    drying: { vi: 'Phơi cà phê', en: 'Drying' },
-    milling: { vi: 'Xay cà phê', en: 'Milling' },
-    tree_care: { vi: 'Chăm cây', en: 'Tree Care' },
-    other: { vi: 'Khác', en: 'Other' },
+    fertilize: { vi: 'Bon phan', en: 'Fertilize', ede: 'Mdung' },
+    pesticide: { vi: 'Phun thuoc', en: 'Pesticide', ede: 'Pur aseh' },
+    irrigate: { vi: 'Tuoi nuoc', en: 'Irrigate', ede: 'Ea hnhao' },
+    prune: { vi: 'Tia canh', en: 'Prune', ede: 'Kueh' },
+    weed: { vi: 'Lam co', en: 'Weed', ede: 'Mkra' },
+    harvest: { vi: 'Thu hoach', en: 'Harvest', ede: 'Pioh' },
+    transport: { vi: 'Van chuyen', en: 'Transport', ede: 'Djam' },
+    drying: { vi: 'Phoi ca phe', en: 'Drying', ede: 'Phui' },
+    milling: { vi: 'Xay ca phe', en: 'Milling', ede: 'Poh' },
+    tree_care: { vi: 'Cham cay', en: 'Tree Care', ede: 'Kiih ana' },
+    other: { vi: 'Khac', en: 'Other', ede: 'Mkra' },
 };
 
 const INSPECT_TYPE_LABELS = {
-    quarterly: { vi: 'Hàng quý', en: 'Quarterly' },
-    monthly: { vi: 'Hàng tháng', en: 'Monthly' },
-    adhoc: { vi: 'Đột xuất', en: 'Ad-hoc' },
+    quarterly: { vi: 'Hang quy', en: 'Quarterly', ede: 'Tlam' },
+    monthly: { vi: 'Hang thang', en: 'Monthly', ede: 'Mlan' },
+    adhoc: { vi: 'Dot xuat', en: 'Ad-hoc', ede: 'Bhian' },
 };
 
-const QUALITY_LABELS = { poor: { vi: 'Kém', en: 'Poor' }, fair: { vi: 'TB', en: 'Fair' }, good: { vi: 'Tốt', en: 'Good' }, excellent: { vi: 'Rất tốt', en: 'Excellent' } };
-const WATER_LABELS = { drought: { vi: 'Hạn', en: 'Drought' }, adequate: { vi: 'Đủ', en: 'Adequate' }, excess: { vi: 'Thừa', en: 'Excess' } };
-const PEST_LABELS = { none: { vi: 'Không', en: 'None' }, minor: { vi: 'Nhẹ', en: 'Minor' }, moderate: { vi: 'TB', en: 'Moderate' }, severe: { vi: 'Nặng', en: 'Severe' } };
+const QUALITY_LABELS = { poor: { vi: 'Kem', en: 'Poor', ede: 'Jhat' }, fair: { vi: 'TB', en: 'Fair', ede: 'Hdai' }, good: { vi: 'Tot', en: 'Good', ede: 'Jia' }, excellent: { vi: 'Rat tot', en: 'Excellent', ede: 'Siam' } };
+const WATER_LABELS = { drought: { vi: 'Han', en: 'Drought', ede: 'Khuah' }, adequate: { vi: 'Du', en: 'Adequate', ede: 'Djap' }, excess: { vi: 'Thua', en: 'Excess', ede: 'Lu' } };
+const PEST_LABELS = { none: { vi: 'Khong', en: 'None', ede: 'Ka' }, minor: { vi: 'Nhe', en: 'Minor', ede: 'Djet' }, moderate: { vi: 'TB', en: 'Moderate', ede: 'Hdai' }, severe: { vi: 'Nang', en: 'Severe', ede: 'Dluh' } };
 
 const CATEGORY_LABELS = {
-    fertilizer: { vi: 'Phân bón', en: 'Fertilizer' },
-    pesticide: { vi: 'Thuốc BVTV', en: 'Pesticide' },
-    labor: { vi: 'Nhân công', en: 'Labor' },
-    fuel: { vi: 'Nhiên liệu', en: 'Fuel' },
-    electricity: { vi: 'Điện', en: 'Electricity' },
-    water_irrigation: { vi: 'Tưới nước', en: 'Irrigation' },
-    harvest_equip: { vi: 'Dụng cụ thu hoạch', en: 'Harvest Equip.' },
-    transport: { vi: 'Vận chuyển', en: 'Transport' },
-    drying: { vi: 'Phơi cà phê', en: 'Drying' },
-    milling: { vi: 'Xay cà phê', en: 'Milling' },
-    ppe: { vi: 'Bảo hộ LĐ', en: 'PPE' },
-    depreciation: { vi: 'Khấu hao', en: 'Depreciation' },
-    loan_interest: { vi: 'Lãi vay', en: 'Loan Interest' },
-    other: { vi: 'Khác', en: 'Other' },
+    fertilizer: { vi: 'Phan bon', en: 'Fertilizer', ede: 'Mdung' },
+    pesticide: { vi: 'Thuoc BVTV', en: 'Pesticide', ede: 'Aseh' },
+    labor: { vi: 'Nhan cong', en: 'Labor', ede: 'Mnuih' },
+    fuel: { vi: 'Nhien lieu', en: 'Fuel', ede: 'Pui' },
+    electricity: { vi: 'Dien', en: 'Electricity', ede: 'Klet' },
+    water_irrigation: { vi: 'Tuoi nuoc', en: 'Irrigation', ede: 'Ea' },
+    harvest_equip: { vi: 'Dung cu thu hoach', en: 'Harvest Equip.', ede: 'Mna' },
+    transport: { vi: 'Van chuyen', en: 'Transport', ede: 'Djam' },
+    drying: { vi: 'Phoi ca phe', en: 'Drying', ede: 'Phui' },
+    milling: { vi: 'Xay ca phe', en: 'Milling', ede: 'Poh' },
+    ppe: { vi: 'Bao ho LD', en: 'PPE', ede: 'Ao brei' },
+    depreciation: { vi: 'Khau hao', en: 'Depreciation', ede: 'Roh' },
+    loan_interest: { vi: 'Lai vay', en: 'Loan Interest', ede: 'Kmlan' },
+    other: { vi: 'Khac', en: 'Other', ede: 'Mkra' },
 };
 
 const today = () => new Date().toISOString().split('T')[0];
@@ -80,17 +80,169 @@ const loadImage = (url) => new Promise((resolve) => {
     img.src = url;
 });
 
-const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [], consumables = [], appLang = 'vi' }) => {
-    const [dateFrom, setDateFrom] = useState(firstOfYear());
-    const [dateTo, setDateTo] = useState(today());
-    const [includeDiary, setIncludeDiary] = useState(true);
-    const [includeInspect, setIncludeInspect] = useState(true);
-    const [includeConsum, setIncludeConsum] = useState(true);
-    const [generating, setGenerating] = useState(false);
+// PDF text labels in 3 languages (ASCII-safe for helvetica font)
+const PDF_LABELS = {
+    vi: {
+        reportTitle: 'BAO CAO MO HINH',
+        reportSubtitle: 'TRINH DIEN CA PHE THICH UNG BIEN DOI KHI HAU',
+        sponsor: 'Tai tro boi Tchibo | Thuc hien boi NKG Viet Nam',
+        modelFarmer: 'Nong ho hinh mau: Neumann Kaffe Group',
+        modelCode: 'Ma mo hinh',
+        name: 'Ten',
+        farmer: 'Nong ho',
+        location: 'Vi tri',
+        area: 'Dien tich',
+        period: 'Thoi gian',
+        diaryTitle: 'NHAT KY CANH TAC',
+        inspectTitle: 'KIEM TRA DINH KY',
+        consumTitle: 'CHI PHI TIEU HAO',
+        costSummary: 'TONG HOP CHI PHI',
+        date: 'Ngay',
+        activity: 'Hoat dong',
+        description: 'Mo ta',
+        material: 'Vat tu',
+        qty: 'SL',
+        laborCost: 'CP nhan cong',
+        matCost: 'CP vat tu',
+        gcp: 'GCP',
+        type: 'Loai',
+        growth: 'Sinh truong',
+        pests: 'Sau benh',
+        soil: 'Dat',
+        water: 'Nuoc',
+        healthPct: 'SK cay %',
+        recomm: 'Khuyen nghi',
+        category: 'Danh muc',
+        item: 'Ten hang muc',
+        unit: 'DV',
+        price: 'Don gia',
+        total: 'Thanh tien',
+        notes: 'Ghi chu',
+        totalLabor: 'Tong CP nhan cong',
+        totalMat: 'Tong CP vat tu',
+        totalAll: 'Tong cong',
+        catCol: 'Hang muc',
+        amountCol: 'Thanh tien (VND)',
+        laborDiary: 'Nhan cong (nhat ky)',
+        matDiary: 'Vat tu (nhat ky)',
+        grandTotal: 'TONG CONG',
+        sigOwner: 'Chu mo hinh',
+        sigInspector: 'Can bo kiem tra',
+        sigApproval: 'Xac nhan du an',
+        sigNote: 'Ky, ghi ro ho ten',
+        footer: 'Bao cao duoc tao tu dong boi phan mem Tan Cao Nguyen',
+        noData: 'Khong co du lieu trong khoang thoi gian nay',
+        ha: 'ha',
+    },
+    en: {
+        reportTitle: 'MODEL REPORT',
+        reportSubtitle: 'CLIMATE-ADAPTED COFFEE DEMONSTRATION',
+        sponsor: 'Sponsored by Tchibo | Implemented by NKG Viet Nam',
+        modelFarmer: 'Model Farmer: Neumann Kaffe Group',
+        modelCode: 'Model code',
+        name: 'Name',
+        farmer: 'Farmer',
+        location: 'Location',
+        area: 'Area',
+        period: 'Period',
+        diaryTitle: 'FARM DIARY',
+        inspectTitle: 'INSPECTIONS',
+        consumTitle: 'CONSUMABLES / COSTS',
+        costSummary: 'COST SUMMARY',
+        date: 'Date',
+        activity: 'Activity',
+        description: 'Description',
+        material: 'Material',
+        qty: 'Qty',
+        laborCost: 'Labor Cost',
+        matCost: 'Mat. Cost',
+        gcp: 'GCP',
+        type: 'Type',
+        growth: 'Growth',
+        pests: 'Pests',
+        soil: 'Soil',
+        water: 'Water',
+        healthPct: 'Health %',
+        recomm: 'Recomm.',
+        category: 'Category',
+        item: 'Item',
+        unit: 'Unit',
+        price: 'Price',
+        total: 'Total',
+        notes: 'Notes',
+        totalLabor: 'Total Labor',
+        totalMat: 'Total Material',
+        totalAll: 'Total',
+        catCol: 'Category',
+        amountCol: 'Amount (VND)',
+        laborDiary: 'Labor (diary)',
+        matDiary: 'Material (diary)',
+        grandTotal: 'GRAND TOTAL',
+        sigOwner: 'Model Owner',
+        sigInspector: 'Inspector',
+        sigApproval: 'Project Approval',
+        sigNote: 'Sign & print name',
+        footer: 'Report auto-generated by Tan Cao Nguyen software',
+        noData: 'No data in this date range',
+        ha: 'ha',
+    },
+    ede: {
+        reportTitle: 'HDRUO KLEI HRA',
+        reportSubtitle: 'HDRUOM KAPHEH MLAN YANG',
+        sponsor: 'Bi Tchibo dua | NKG Viet Nam ngă',
+        modelFarmer: 'Mnuih hma hdruo: Neumann Kaffe Group',
+        modelCode: 'Kud hdruo',
+        name: 'Anăn',
+        farmer: 'Mnuih hma',
+        location: 'Anôk',
+        area: 'Prong',
+        period: 'Mông',
+        diaryTitle: 'HDRO HMA',
+        inspectTitle: 'DLANG HRUÊ',
+        consumTitle: 'PRAK MNGA',
+        costSummary: 'PRAK ABOH',
+        date: 'Hruê',
+        activity: 'Bruă',
+        description: 'Klei',
+        material: 'Mna',
+        qty: 'SL',
+        laborCost: 'CP mnuih',
+        matCost: 'CP mna',
+        gcp: 'GCP',
+        type: 'Mta',
+        growth: 'Đuôn',
+        pests: 'Hngah',
+        soil: 'Lăn',
+        water: 'Ea',
+        healthPct: 'SK %',
+        recomm: 'Kčah',
+        category: 'Mta',
+        item: 'Anăn',
+        unit: 'DV',
+        price: 'Mlan',
+        total: 'Prak',
+        notes: 'Klei',
+        totalLabor: 'Prak mnuih',
+        totalMat: 'Prak mna',
+        totalAll: 'Aboh',
+        catCol: 'Mta',
+        amountCol: 'Prak (VND)',
+        laborDiary: 'Mnuih (hdro)',
+        matDiary: 'Mna (hdro)',
+        grandTotal: 'ABOH PRAK',
+        sigOwner: 'Khua hdruo',
+        sigInspector: 'Pô dlăng',
+        sigApproval: 'Pô bi sĭt',
+        sigNote: 'Čih anăn',
+        footer: 'Hdruo mơ̆ng Tan Cao Nguyen',
+        noData: 'Ka mâo klei hra',
+        ha: 'ha',
+    },
+};
 
-    if (!show) return null;
-
-    const L = appLang === 'vi' ? {
+// UI dialog labels (with diacritics for screen display)
+const DIALOG_LABELS = {
+    vi: {
         title: 'Xuất báo cáo PDF',
         dateRange: 'Khoảng thời gian',
         from: 'Từ ngày',
@@ -102,8 +254,8 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
         generate: 'Xuất PDF',
         cancel: 'Hủy',
         generating: 'Đang tạo...',
-        noData: 'Không có dữ liệu trong khoảng thời gian này',
-    } : {
+    },
+    en: {
         title: 'Export PDF Report',
         dateRange: 'Date Range',
         from: 'From',
@@ -115,13 +267,39 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
         generate: 'Export PDF',
         cancel: 'Cancel',
         generating: 'Generating...',
-        noData: 'No data in this date range',
-    };
+    },
+    ede: {
+        title: 'Mă hdruo PDF',
+        dateRange: 'Mông',
+        from: 'Mơ̆ng',
+        to: 'Truh',
+        sections: 'Klei hra',
+        diary: 'Hdro hma',
+        inspect: 'Dlăng hruê',
+        consum: 'Prăk mnga',
+        generate: 'Mă PDF',
+        cancel: 'Hĭn',
+        generating: 'Dôk ngă...',
+    },
+};
+
+const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [], consumables = [], appLang = 'vi' }) => {
+    const [dateFrom, setDateFrom] = useState(firstOfYear());
+    const [dateTo, setDateTo] = useState(today());
+    const [includeDiary, setIncludeDiary] = useState(true);
+    const [includeInspect, setIncludeInspect] = useState(true);
+    const [includeConsum, setIncludeConsum] = useState(true);
+    const [generating, setGenerating] = useState(false);
+
+    if (!show) return null;
+
+    const DL = DIALOG_LABELS[appLang] || DIALOG_LABELS.vi;
 
     const generatePDF = async () => {
         setGenerating(true);
         try {
             const lang = appLang;
+            const P = PDF_LABELS[lang] || PDF_LABELS.vi;
             const doc = new jsPDF('p', 'mm', 'a4');
             const pageW = doc.internal.pageSize.getWidth();
             const pageH = doc.internal.pageSize.getHeight();
@@ -129,7 +307,6 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             const contentW = pageW - margin * 2;
             let y = margin;
 
-            // Register Vietnamese font support
             doc.setFont('helvetica');
 
             // --- HEADER: Logo + Title ---
@@ -146,31 +323,40 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             const titleX = logoData ? margin + 35 : margin;
             doc.setFontSize(16);
             doc.setFont('helvetica', 'bold');
-            doc.text(lang === 'vi' ? 'BAO CAO MO HINH' : 'MODEL REPORT', titleX, y + 8);
-            doc.setFontSize(12);
-            doc.text(lang === 'vi' ? 'TRINH DIEN CA PHE' : 'COFFEE DEMONSTRATION', titleX, y + 15);
+            doc.text(P.reportTitle, titleX, y + 8);
+            doc.setFontSize(10);
+            doc.text(P.reportSubtitle, titleX, y + 15);
+
+            // Sponsor line
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'italic');
+            doc.text(P.sponsor, titleX, y + 21);
 
             doc.setFontSize(9);
             doc.setFont('helvetica', 'normal');
-            const infoX = titleX;
-            let infoY = y + 22;
-            doc.text(`${lang === 'vi' ? 'Ma mo hinh' : 'Model code'}: ${model.model_code || ''}`, infoX, infoY);
+            let infoY = y + 28;
+            doc.text(`${P.modelCode}: ${model.model_code || ''}`, titleX, infoY);
             infoY += 5;
-            doc.text(`${lang === 'vi' ? 'Ten' : 'Name'}: ${model.name || model.model_name || ''}`, infoX, infoY);
+            doc.text(`${P.name}: ${model.name || model.model_name || ''}`, titleX, infoY);
             infoY += 5;
-            doc.text(`${lang === 'vi' ? 'Nong ho' : 'Farmer'}: ${farmer?.full_name || '---'}`, infoX, infoY);
+            doc.text(`${P.farmer}: ${farmer?.full_name || '---'}`, titleX, infoY);
             infoY += 5;
-            const location = model.village && model.commune ? `${model.village}, ${model.commune}` : model.commune || model.location || '';
+            const location = [model.village, model.commune, model.district, model.province].filter(Boolean).join(', ')
+                || [farmer?.village, farmer?.commune, farmer?.province].filter(Boolean).join(', ');
             if (location) {
-                doc.text(`${lang === 'vi' ? 'Vi tri' : 'Location'}: ${location}`, infoX, infoY);
+                doc.text(`${P.location}: ${location}`, titleX, infoY);
                 infoY += 5;
             }
-            doc.text(`${lang === 'vi' ? 'Thoi gian' : 'Period'}: ${fmtDate(dateFrom)} - ${fmtDate(dateTo)}`, infoX, infoY);
+            if (model.target_area) {
+                doc.text(`${P.area}: ${model.target_area} ${P.ha}`, titleX, infoY);
+                infoY += 5;
+            }
+            doc.text(`${P.period}: ${fmtDate(dateFrom)} - ${fmtDate(dateTo)}`, titleX, infoY);
             infoY += 3;
 
-            y = Math.max(y + (logoData ? 33 : 0), infoY + 2);
+            y = Math.max(y + (logoData ? 35 : 0), infoY + 2);
 
-            // Divider line
+            // Divider
             doc.setDrawColor(120, 120, 120);
             doc.setLineWidth(0.5);
             doc.line(margin, y, pageW - margin, y);
@@ -183,7 +369,6 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
 
             let sectionNum = 0;
 
-            // --- Helper: check if need new page ---
             const ensureSpace = (needed) => {
                 if (y + needed > pageH - 30) {
                     doc.addPage();
@@ -197,30 +382,21 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                 ensureSpace(20);
                 doc.setFontSize(11);
                 doc.setFont('helvetica', 'bold');
-                doc.text(`${sectionNum}. ${lang === 'vi' ? 'NHAT KY CANH TAC' : 'FARM DIARY'} (${diaryData.length})`, margin, y);
+                doc.text(`${sectionNum}. ${P.diaryTitle} (${diaryData.length})`, margin, y);
                 y += 3;
 
                 if (diaryData.length === 0) {
                     doc.setFontSize(9);
                     doc.setFont('helvetica', 'italic');
-                    doc.text(L.noData, margin + 5, y + 5);
+                    doc.text(P.noData, margin + 5, y + 5);
                     y += 10;
                 } else {
-                    doc.autoTable({
+                    autoTable(doc, {
                         startY: y,
                         margin: { left: margin, right: margin },
                         styles: { fontSize: 7, cellPadding: 2, font: 'helvetica' },
                         headStyles: { fillColor: [93, 64, 55], textColor: 255, fontStyle: 'bold' },
-                        head: [[
-                            lang === 'vi' ? 'Ngay' : 'Date',
-                            lang === 'vi' ? 'Hoat dong' : 'Activity',
-                            lang === 'vi' ? 'Mo ta' : 'Description',
-                            lang === 'vi' ? 'Vat tu' : 'Material',
-                            'SL',
-                            lang === 'vi' ? 'CP nhan cong' : 'Labor Cost',
-                            lang === 'vi' ? 'CP vat tu' : 'Mat. Cost',
-                            'GCP',
-                        ]],
+                        head: [[P.date, P.activity, P.description, P.material, P.qty, P.laborCost, P.matCost, P.gcp]],
                         body: diaryData.map(d => [
                             fmtDate(d.diary_date),
                             labelFor(ACTIVITY_LABELS, d.activity_type, lang),
@@ -244,12 +420,11 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                     });
                     y = doc.lastAutoTable.finalY + 4;
 
-                    // Diary cost subtotal
                     const diaryLaborTotal = diaryData.reduce((s, d) => s + (d.labor_cost || 0), 0);
                     const diaryMatTotal = diaryData.reduce((s, d) => s + (d.material_cost || 0), 0);
                     doc.setFontSize(8);
                     doc.setFont('helvetica', 'bold');
-                    doc.text(`${lang === 'vi' ? 'Tong CP nhan cong' : 'Total Labor'}: ${fmtNum(diaryLaborTotal)} | ${lang === 'vi' ? 'Tong CP vat tu' : 'Total Material'}: ${fmtNum(diaryMatTotal)} | ${lang === 'vi' ? 'Tong cong' : 'Total'}: ${fmtNum(diaryLaborTotal + diaryMatTotal)} VND`, margin + 5, y);
+                    doc.text(`${P.totalLabor}: ${fmtNum(diaryLaborTotal)} | ${P.totalMat}: ${fmtNum(diaryMatTotal)} | ${P.totalAll}: ${fmtNum(diaryLaborTotal + diaryMatTotal)} VND`, margin + 5, y);
                     y += 8;
                 }
             }
@@ -260,30 +435,21 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                 ensureSpace(20);
                 doc.setFontSize(11);
                 doc.setFont('helvetica', 'bold');
-                doc.text(`${sectionNum}. ${lang === 'vi' ? 'KIEM TRA DINH KY' : 'INSPECTIONS'} (${inspectData.length})`, margin, y);
+                doc.text(`${sectionNum}. ${P.inspectTitle} (${inspectData.length})`, margin, y);
                 y += 3;
 
                 if (inspectData.length === 0) {
                     doc.setFontSize(9);
                     doc.setFont('helvetica', 'italic');
-                    doc.text(L.noData, margin + 5, y + 5);
+                    doc.text(P.noData, margin + 5, y + 5);
                     y += 10;
                 } else {
-                    doc.autoTable({
+                    autoTable(doc, {
                         startY: y,
                         margin: { left: margin, right: margin },
                         styles: { fontSize: 7, cellPadding: 2, font: 'helvetica' },
                         headStyles: { fillColor: [30, 64, 175], textColor: 255, fontStyle: 'bold' },
-                        head: [[
-                            lang === 'vi' ? 'Ngay' : 'Date',
-                            lang === 'vi' ? 'Loai' : 'Type',
-                            lang === 'vi' ? 'Sinh truong' : 'Growth',
-                            lang === 'vi' ? 'Sau benh' : 'Pests',
-                            lang === 'vi' ? 'Dat' : 'Soil',
-                            lang === 'vi' ? 'Nuoc' : 'Water',
-                            lang === 'vi' ? 'SK cay %' : 'Health %',
-                            lang === 'vi' ? 'Khuyen nghi' : 'Recomm.',
-                        ]],
+                        head: [[P.date, P.type, P.growth, P.pests, P.soil, P.water, P.healthPct, P.recomm]],
                         body: inspectData.map(i => [
                             fmtDate(i.inspection_date),
                             labelFor(INSPECT_TYPE_LABELS, i.inspection_type, lang),
@@ -310,30 +476,21 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                 ensureSpace(20);
                 doc.setFontSize(11);
                 doc.setFont('helvetica', 'bold');
-                doc.text(`${sectionNum}. ${lang === 'vi' ? 'CHI PHI TIEU HAO' : 'CONSUMABLES/COSTS'} (${consumData.length})`, margin, y);
+                doc.text(`${sectionNum}. ${P.consumTitle} (${consumData.length})`, margin, y);
                 y += 3;
 
                 if (consumData.length === 0) {
                     doc.setFontSize(9);
                     doc.setFont('helvetica', 'italic');
-                    doc.text(L.noData, margin + 5, y + 5);
+                    doc.text(P.noData, margin + 5, y + 5);
                     y += 10;
                 } else {
-                    doc.autoTable({
+                    autoTable(doc, {
                         startY: y,
                         margin: { left: margin, right: margin },
                         styles: { fontSize: 7, cellPadding: 2, font: 'helvetica' },
                         headStyles: { fillColor: [133, 77, 14], textColor: 255, fontStyle: 'bold' },
-                        head: [[
-                            lang === 'vi' ? 'Ngay' : 'Date',
-                            lang === 'vi' ? 'Danh muc' : 'Category',
-                            lang === 'vi' ? 'Ten hang muc' : 'Item',
-                            'SL',
-                            lang === 'vi' ? 'DV' : 'Unit',
-                            lang === 'vi' ? 'Don gia' : 'Price',
-                            lang === 'vi' ? 'Thanh tien' : 'Total',
-                            lang === 'vi' ? 'Ghi chu' : 'Notes',
-                        ]],
+                        head: [[P.date, P.category, P.item, P.qty, P.unit, P.price, P.total, P.notes]],
                         body: consumData.map(c => [
                             fmtDate(c.record_date),
                             labelFor(CATEGORY_LABELS, c.category, lang),
@@ -361,7 +518,6 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                     });
                     const consumTotal = consumData.reduce((s, c) => s + (c.total_cost || 0), 0);
 
-                    // Also add diary costs
                     const diaryFiltered = includeDiary ? filterByDate(diary, 'diary_date', dateFrom, dateTo) : [];
                     const diaryLaborSum = diaryFiltered.reduce((s, d) => s + (d.labor_cost || 0), 0);
                     const diaryMatSum = diaryFiltered.reduce((s, d) => s + (d.material_cost || 0), 0);
@@ -369,21 +525,24 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                     ensureSpace(40);
                     doc.setFontSize(11);
                     doc.setFont('helvetica', 'bold');
-                    doc.text(lang === 'vi' ? 'TONG HOP CHI PHI' : 'COST SUMMARY', margin, y + 6);
+                    doc.text(P.costSummary, margin, y + 6);
                     y += 9;
 
                     const summaryRows = Object.entries(byCat).map(([cat, total]) => [cat, fmtNum(total)]);
-                    if (diaryLaborSum > 0) summaryRows.push([lang === 'vi' ? 'Nhan cong (nhat ky)' : 'Labor (diary)', fmtNum(diaryLaborSum)]);
-                    if (diaryMatSum > 0) summaryRows.push([lang === 'vi' ? 'Vat tu (nhat ky)' : 'Material (diary)', fmtNum(diaryMatSum)]);
+                    if (diaryLaborSum > 0) summaryRows.push([P.laborDiary, fmtNum(diaryLaborSum)]);
+                    if (diaryMatSum > 0) summaryRows.push([P.matDiary, fmtNum(diaryMatSum)]);
                     const grandTotal = consumTotal + diaryLaborSum + diaryMatSum;
-                    summaryRows.push([{ content: lang === 'vi' ? 'TONG CONG' : 'GRAND TOTAL', styles: { fontStyle: 'bold' } }, { content: fmtNum(grandTotal) + ' VND', styles: { fontStyle: 'bold' } }]);
+                    summaryRows.push([
+                        { content: P.grandTotal, styles: { fontStyle: 'bold' } },
+                        { content: fmtNum(grandTotal) + ' VND', styles: { fontStyle: 'bold' } }
+                    ]);
 
-                    doc.autoTable({
+                    autoTable(doc, {
                         startY: y,
                         margin: { left: margin + 20, right: margin + 20 },
                         styles: { fontSize: 9, cellPadding: 3, font: 'helvetica' },
                         headStyles: { fillColor: [46, 125, 50], textColor: 255 },
-                        head: [[lang === 'vi' ? 'Hang muc' : 'Category', lang === 'vi' ? 'Thanh tien (VND)' : 'Amount (VND)']],
+                        head: [[P.catCol, P.amountCol]],
                         body: summaryRows,
                         columnStyles: {
                             1: { halign: 'right', cellWidth: 40 },
@@ -394,13 +553,11 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             }
 
             // --- SIGNATURE BLOCK ---
-            // Ensure signature is at bottom of last page
             const sigHeight = 45;
             if (y + sigHeight > pageH - 15) {
                 doc.addPage();
                 y = margin;
             }
-            // Push signature to bottom area
             y = Math.max(y + 10, pageH - sigHeight - 15);
 
             doc.setDrawColor(180, 180, 180);
@@ -410,9 +567,9 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
 
             const colW = contentW / 3;
             const sigCols = [
-                { title: lang === 'vi' ? 'Chu mo hinh' : 'Model Owner', name: farmer?.full_name || '' },
-                { title: lang === 'vi' ? 'Can bo kiem tra' : 'Inspector', name: '' },
-                { title: lang === 'vi' ? 'Xac nhan du an' : 'Project Approval', name: '' },
+                { title: P.sigOwner, name: farmer?.full_name || '' },
+                { title: P.sigInspector, name: '' },
+                { title: P.sigApproval, name: '' },
             ];
 
             sigCols.forEach((col, i) => {
@@ -425,13 +582,11 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
 
                 doc.setFontSize(8);
                 doc.setFont('helvetica', 'italic');
-                doc.text(`(${lang === 'vi' ? 'Ky, ghi ro ho ten' : 'Sign & print name'})`, centerX, y + 5, { align: 'center' });
+                doc.text(`(${P.sigNote})`, centerX, y + 5, { align: 'center' });
 
-                // Signature line
                 doc.setLineWidth(0.2);
                 doc.line(x + 10, y + 22, x + colW - 10, y + 22);
 
-                // Pre-fill name if available
                 if (col.name) {
                     doc.setFont('helvetica', 'normal');
                     doc.setFontSize(8);
@@ -443,10 +598,7 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             doc.setFontSize(7);
             doc.setFont('helvetica', 'italic');
             doc.setTextColor(150, 150, 150);
-            doc.text(
-                lang === 'vi' ? 'Bao cao duoc tao tu dong boi phan mem Tan Cao Nguyen' : 'Report auto-generated by Tan Cao Nguyen software',
-                pageW / 2, pageH - 8, { align: 'center' }
-            );
+            doc.text(P.footer, pageW / 2, pageH - 8, { align: 'center' });
             doc.setTextColor(0, 0, 0);
 
             // --- SAVE ---
@@ -482,7 +634,7 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                     <h3 style={{ margin: 0, fontSize: '17px', fontWeight: 700, color: 'var(--coffee-dark)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <i className="fas fa-file-pdf" style={{ color: '#dc2626' }}></i>
-                        {L.title}
+                        {DL.title}
                     </h3>
                     <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '20px', color: '#94a3b8', cursor: 'pointer' }}>
                         <i className="fas fa-times"></i>
@@ -501,15 +653,15 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                 {/* Date range */}
                 <div style={{ marginBottom: '16px' }}>
                     <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--gray-700)', marginBottom: '6px' }}>
-                        <i className="fas fa-calendar-alt" style={{ marginRight: '6px' }}></i>{L.dateRange}
+                        <i className="fas fa-calendar-alt" style={{ marginRight: '6px' }}></i>{DL.dateRange}
                     </label>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                         <div>
-                            <span style={{ fontSize: '10px', color: 'var(--gray-700)' }}>{L.from}</span>
+                            <span style={{ fontSize: '10px', color: 'var(--gray-700)' }}>{DL.from}</span>
                             <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={inputStyle} />
                         </div>
                         <div>
-                            <span style={{ fontSize: '10px', color: 'var(--gray-700)' }}>{L.to}</span>
+                            <span style={{ fontSize: '10px', color: 'var(--gray-700)' }}>{DL.to}</span>
                             <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={inputStyle} />
                         </div>
                     </div>
@@ -518,12 +670,12 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                 {/* Section toggles */}
                 <div style={{ marginBottom: '20px' }}>
                     <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--gray-700)', marginBottom: '8px' }}>
-                        <i className="fas fa-list-check" style={{ marginRight: '6px' }}></i>{L.sections}
+                        <i className="fas fa-list-check" style={{ marginRight: '6px' }}></i>{DL.sections}
                     </label>
                     {[
-                        { checked: includeDiary, set: setIncludeDiary, label: L.diary, icon: 'fa-book', color: '#166534', count: diary.length },
-                        { checked: includeInspect, set: setIncludeInspect, label: L.inspect, icon: 'fa-clipboard-check', color: '#1e40af', count: inspections.length },
-                        { checked: includeConsum, set: setIncludeConsum, label: L.consum, icon: 'fa-receipt', color: '#854d0e', count: consumables.length },
+                        { checked: includeDiary, set: setIncludeDiary, label: DL.diary, icon: 'fa-book', color: '#166534', count: diary.length },
+                        { checked: includeInspect, set: setIncludeInspect, label: DL.inspect, icon: 'fa-clipboard-check', color: '#1e40af', count: inspections.length },
+                        { checked: includeConsum, set: setIncludeConsum, label: DL.consum, icon: 'fa-receipt', color: '#854d0e', count: consumables.length },
                     ].map((s, i) => (
                         <label key={i} style={{
                             display: 'flex', alignItems: 'center', gap: '10px', padding: '8px 12px',
@@ -547,7 +699,7 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                         flex: 1, padding: '12px', border: '1.5px solid var(--gray-200, #e2e8f0)',
                         borderRadius: '12px', background: 'var(--white, #fff)', fontSize: '14px',
                         fontWeight: 600, cursor: 'pointer', color: '#64748b'
-                    }}>{L.cancel}</button>
+                    }}>{DL.cancel}</button>
                     <button onClick={generatePDF} disabled={generating || (!includeDiary && !includeInspect && !includeConsum)} style={{
                         flex: 1, padding: '12px', border: 'none', borderRadius: '12px',
                         background: generating ? '#94a3b8' : '#dc2626', color: 'white',
@@ -556,7 +708,7 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                         opacity: (!includeDiary && !includeInspect && !includeConsum) ? 0.5 : 1,
                     }}>
                         <i className={generating ? 'fas fa-spinner fa-spin' : 'fas fa-file-pdf'}></i>
-                        {generating ? L.generating : L.generate}
+                        {generating ? DL.generating : DL.generate}
                     </button>
                 </div>
             </div>

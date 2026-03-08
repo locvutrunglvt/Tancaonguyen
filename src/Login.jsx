@@ -143,9 +143,9 @@ const Login = () => {
 
     const orgs = [
         { id: 'tcn', name: t.org_tcn || 'Tân Cao Nguyên' },
-        { id: 'tch', name: t.org_tch || 'Tchibo Việt Nam' },
-        { id: 'nkg', name: t.org_nkg || 'Neumann Kaffee Gruppe' },
-        { id: 'far', name: t.org_far || 'Nông hộ hình mẫu' }
+        { id: 'tch', name: t.org_tch || 'Tchibo' },
+        { id: 'nkg', name: t.org_nkg || 'NKG Việt Nam' },
+        { id: 'far', name: t.org_far || 'Neumann Kaffe Group' }
     ];
 
     return (
