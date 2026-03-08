@@ -4,60 +4,70 @@ import { translations } from './translations';
 import './Dashboard.css';
 
 const TABS = [
-    { id: 'overview', icon: 'fa-info-circle', vi: 'Tong quan', en: 'Overview', ede: 'Klei dlieh' },
-    { id: 'farmer', icon: 'fa-user', vi: 'Nong ho', en: 'Farmer', ede: 'Mnuih' },
-    { id: 'farm', icon: 'fa-map', vi: 'Trang trai', en: 'Farm', ede: 'Hma' },
-    { id: 'diary', icon: 'fa-book', vi: 'Nhat ky', en: 'Diary', ede: 'Hdro' },
-    { id: 'inspect', icon: 'fa-clipboard-check', vi: 'Kiem tra', en: 'Inspect', ede: 'Dlang' },
-    { id: 'consumable', icon: 'fa-receipt', vi: 'Tieu hao', en: 'Costs', ede: 'Prak' },
-    { id: 'invest', icon: 'fa-chart-pie', vi: 'Dau tu', en: 'Invest', ede: 'Mnga' }
+    { id: 'overview', icon: 'fa-info-circle', vi: 'Tổng quan', en: 'Overview', ede: 'Klei dlieh' },
+    { id: 'farmer', icon: 'fa-user', vi: 'Nông hộ', en: 'Farmer', ede: 'Mnuih' },
+    { id: 'farm', icon: 'fa-map', vi: 'Trang trại', en: 'Farm', ede: 'Hma' },
+    { id: 'diary', icon: 'fa-book', vi: 'Nhật ký', en: 'Diary', ede: 'Hdro' },
+    { id: 'inspect', icon: 'fa-clipboard-check', vi: 'Kiểm tra', en: 'Inspect', ede: 'Dlang' },
+    { id: 'consumable', icon: 'fa-receipt', vi: 'Tiêu hao', en: 'Costs', ede: 'Prak' },
+    { id: 'invest', icon: 'fa-chart-pie', vi: 'Đầu tư', en: 'Invest', ede: 'Mnga' }
 ];
 
 const ACTIVITY_TYPES = [
-    { value: 'fertilize', vi: 'Bon phan', en: 'Fertilize' },
-    { value: 'pesticide', vi: 'Phun thuoc', en: 'Pesticide' },
-    { value: 'irrigate', vi: 'Tuoi nuoc', en: 'Irrigate' },
-    { value: 'prune', vi: 'Tia canh', en: 'Prune' },
-    { value: 'weed', vi: 'Lam co', en: 'Weed' },
-    { value: 'harvest', vi: 'Thu hoach', en: 'Harvest' },
-    { value: 'tree_care', vi: 'Cham cay', en: 'Tree Care' },
-    { value: 'other', vi: 'Khac', en: 'Other' },
+    { value: 'fertilize', vi: 'Bón phân', en: 'Fertilize' },
+    { value: 'pesticide', vi: 'Phun thuốc', en: 'Pesticide' },
+    { value: 'irrigate', vi: 'Tưới nước', en: 'Irrigate' },
+    { value: 'prune', vi: 'Tỉa cành', en: 'Prune' },
+    { value: 'weed', vi: 'Làm cỏ', en: 'Weed' },
+    { value: 'harvest', vi: 'Thu hoạch', en: 'Harvest' },
+    { value: 'transport', vi: 'Vận chuyển', en: 'Transport' },
+    { value: 'drying', vi: 'Phơi cà phê', en: 'Drying' },
+    { value: 'milling', vi: 'Xay cà phê', en: 'Milling' },
+    { value: 'tree_care', vi: 'Chăm cây', en: 'Tree Care' },
+    { value: 'other', vi: 'Khác', en: 'Other' },
 ];
 
 const INSPECTION_TYPES = [
-    { value: 'quarterly', vi: 'Hang quy', en: 'Quarterly' },
-    { value: 'monthly', vi: 'Hang thang', en: 'Monthly' },
-    { value: 'adhoc', vi: 'Dot xuat', en: 'Ad-hoc' },
+    { value: 'quarterly', vi: 'Hàng quý', en: 'Quarterly' },
+    { value: 'monthly', vi: 'Hàng tháng', en: 'Monthly' },
+    { value: 'adhoc', vi: 'Đột xuất', en: 'Ad-hoc' },
 ];
 
 const QUALITY_OPTIONS = [
-    { value: 'poor', vi: 'Kem', en: 'Poor' },
+    { value: 'poor', vi: 'Kém', en: 'Poor' },
     { value: 'fair', vi: 'TB', en: 'Fair' },
-    { value: 'good', vi: 'Tot', en: 'Good' },
-    { value: 'excellent', vi: 'Rat tot', en: 'Excellent' },
+    { value: 'good', vi: 'Tốt', en: 'Good' },
+    { value: 'excellent', vi: 'Rất tốt', en: 'Excellent' },
 ];
 
 const WATER_OPTIONS = [
-    { value: 'drought', vi: 'Han', en: 'Drought' },
-    { value: 'adequate', vi: 'Du', en: 'Adequate' },
-    { value: 'excess', vi: 'Thua', en: 'Excess' },
+    { value: 'drought', vi: 'Hạn', en: 'Drought' },
+    { value: 'adequate', vi: 'Đủ', en: 'Adequate' },
+    { value: 'excess', vi: 'Thừa', en: 'Excess' },
 ];
 
 const PEST_OPTIONS = [
-    { value: 'none', vi: 'Khong', en: 'None' },
-    { value: 'minor', vi: 'Nhe', en: 'Minor' },
+    { value: 'none', vi: 'Không', en: 'None' },
+    { value: 'minor', vi: 'Nhẹ', en: 'Minor' },
     { value: 'moderate', vi: 'TB', en: 'Moderate' },
-    { value: 'severe', vi: 'Nang', en: 'Severe' },
+    { value: 'severe', vi: 'Nặng', en: 'Severe' },
 ];
 
 const CONSUMABLE_CATEGORIES = [
-    { value: 'fertilizer', vi: 'Phan bon', en: 'Fertilizer' },
-    { value: 'pesticide', vi: 'Thuoc BVTV', en: 'Pesticide' },
-    { value: 'labor', vi: 'Nhan cong', en: 'Labor' },
-    { value: 'fuel', vi: 'Nhien lieu', en: 'Fuel' },
-    { value: 'electricity', vi: 'Dien', en: 'Electricity' },
-    { value: 'water', vi: 'Nuoc', en: 'Water' },
-    { value: 'other', vi: 'Khac', en: 'Other' },
+    { value: 'fertilizer', vi: 'Phân bón', en: 'Fertilizer' },
+    { value: 'pesticide', vi: 'Thuốc BVTV', en: 'Pesticide' },
+    { value: 'labor', vi: 'Nhân công', en: 'Labor' },
+    { value: 'fuel', vi: 'Nhiên liệu', en: 'Fuel' },
+    { value: 'electricity', vi: 'Điện', en: 'Electricity' },
+    { value: 'water_irrigation', vi: 'Tưới nước', en: 'Irrigation' },
+    { value: 'harvest_equip', vi: 'Dụng cụ thu hoạch', en: 'Harvest Equipment' },
+    { value: 'transport', vi: 'Vận chuyển', en: 'Transport' },
+    { value: 'drying', vi: 'Phơi cà phê', en: 'Drying' },
+    { value: 'milling', vi: 'Xay cà phê', en: 'Milling' },
+    { value: 'ppe', vi: 'Bảo hộ lao động', en: 'PPE/Safety' },
+    { value: 'depreciation', vi: 'Khấu hao', en: 'Depreciation' },
+    { value: 'loan_interest', vi: 'Lãi vay', en: 'Loan Interest' },
+    { value: 'other', vi: 'Khác', en: 'Other' },
 ];
 
 const today = () => new Date().toISOString().split('T')[0];
@@ -155,7 +165,7 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
     // ── CRUD Handlers ──
 
     const handleSaveDiary = async () => {
-        if (!diaryForm.description.trim()) return alert(appLang === 'vi' ? 'Vui long nhap mo ta' : 'Please enter description');
+        if (!diaryForm.description.trim()) return alert(appLang === 'vi' ? 'Vui lòng nhập mô tả' : 'Please enter description');
         setSaving(true);
         try {
             const data = {
@@ -228,7 +238,7 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
     };
 
     const handleSaveConsum = async () => {
-        if (!consumForm.item_name.trim()) return alert(appLang === 'vi' ? 'Vui long nhap ten hang muc' : 'Please enter item name');
+        if (!consumForm.item_name.trim()) return alert(appLang === 'vi' ? 'Vui lòng nhập tên hạng mục' : 'Please enter item name');
         setSaving(true);
         try {
             const qty = consumForm.quantity ? Number(consumForm.quantity) : null;
@@ -263,7 +273,7 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
     };
 
     const handleDeleteRecord = async (collection, id, refreshFn) => {
-        if (!confirm(appLang === 'vi' ? 'Ban co chac muon xoa?' : 'Are you sure you want to delete?')) return;
+        if (!confirm(appLang === 'vi' ? 'Bạn có chắc muốn xóa?' : 'Are you sure you want to delete?')) return;
         try {
             await pb.collection(collection).delete(id);
             refreshFn();
@@ -472,7 +482,7 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
             background: 'var(--coffee-primary)', color: 'white', fontSize: '12px', fontWeight: 700,
             display: 'flex', alignItems: 'center', gap: '5px'
         }}>
-            <i className="fas fa-plus"></i> {label || (appLang === 'vi' ? 'Them' : 'Add')}
+            <i className="fas fa-plus"></i> {label || (appLang === 'vi' ? 'Thêm' : 'Add')}
         </button>
     );
 
@@ -500,13 +510,13 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                         <button onClick={onClose} style={{
                             flex: 1, padding: '12px', border: '1.5px solid #e2e8f0', borderRadius: '12px',
                             background: 'white', fontSize: '14px', fontWeight: 600, cursor: 'pointer', color: '#64748b'
-                        }}>{appLang === 'vi' ? 'Huy' : 'Cancel'}</button>
+                        }}>{appLang === 'vi' ? 'Hủy' : 'Cancel'}</button>
                         <button onClick={onSave} disabled={saving} style={{
                             flex: 1, padding: '12px', border: 'none', borderRadius: '12px',
                             background: 'var(--coffee-primary)', color: 'white', fontSize: '14px', fontWeight: 700,
                             cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.6 : 1
                         }}>
-                            {saving ? <i className="fas fa-spinner fa-spin"></i> : (editingItem ? (appLang === 'vi' ? 'Cap nhat' : 'Update') : (appLang === 'vi' ? 'Luu' : 'Save'))}
+                            {saving ? <i className="fas fa-spinner fa-spin"></i> : (editingItem ? (appLang === 'vi' ? 'Cập nhật' : 'Update') : (appLang === 'vi' ? 'Lưu' : 'Save'))}
                         </button>
                     </div>
                 </div>
@@ -518,23 +528,23 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
 
     const renderOverview = () => (
         <>
-            <SectionCard title={appLang === 'vi' ? 'Thong tin mo hinh' : 'Model Info'} icon="fa-seedling">
-                <InfoRow label="Ma mo hinh" value={model.model_code} icon="fa-hashtag" />
-                <InfoRow label="Ten" value={model.name || model.model_name} icon="fa-tag" />
-                <InfoRow label="Mo ta" value={model.description} icon="fa-align-left" />
-                <InfoRow label="Vi tri" value={model.location || (model.commune && model.village ? `${model.village}, ${model.commune}` : model.commune)} icon="fa-map-marker-alt" />
-                <InfoRow label="Tinh" value={model.province || 'Gia Lai'} icon="fa-globe" />
-                <InfoRow label="Dien tich" value={(model.area || model.target_area) ? `${model.area || model.target_area} ha` : null} icon="fa-ruler-combined" />
-                <InfoRow label="Loai ca phe" value={model.coffee_type} icon="fa-mug-hot" />
-                <InfoRow label="Trang thai" value={model.status?.toUpperCase()} icon="fa-flag" />
-                <InfoRow label="Du lieu" value={model.data_status} icon="fa-database" />
+            <SectionCard title={appLang === 'vi' ? 'Thông tin mô hình' : 'Model Info'} icon="fa-seedling">
+                <InfoRow label={appLang === 'vi' ? 'Mã mô hình' : 'Model code'} value={model.model_code} icon="fa-hashtag" />
+                <InfoRow label={appLang === 'vi' ? 'Tên' : 'Name'} value={model.name || model.model_name} icon="fa-tag" />
+                <InfoRow label={appLang === 'vi' ? 'Mô tả' : 'Description'} value={model.description} icon="fa-align-left" />
+                <InfoRow label={appLang === 'vi' ? 'Vị trí' : 'Location'} value={model.location || (model.commune && model.village ? `${model.village}, ${model.commune}` : model.commune)} icon="fa-map-marker-alt" />
+                <InfoRow label={appLang === 'vi' ? 'Tỉnh' : 'Province'} value={model.province || 'Gia Lai'} icon="fa-globe" />
+                <InfoRow label={appLang === 'vi' ? 'Diện tích' : 'Area'} value={(model.area || model.target_area) ? `${model.area || model.target_area} ha` : null} icon="fa-ruler-combined" />
+                <InfoRow label={appLang === 'vi' ? 'Loại cà phê' : 'Coffee type'} value={model.coffee_type} icon="fa-mug-hot" />
+                <InfoRow label={appLang === 'vi' ? 'Trạng thái' : 'Status'} value={model.status?.toUpperCase()} icon="fa-flag" />
+                <InfoRow label={appLang === 'vi' ? 'Dữ liệu' : 'Data'} value={model.data_status} icon="fa-database" />
             </SectionCard>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
                 {[
-                    { label: appLang === 'vi' ? 'Nhat ky' : 'Diary', count: diary.length, color: '#166534', bg: '#dcfce7', icon: 'fa-book' },
-                    { label: appLang === 'vi' ? 'Kiem tra' : 'Inspections', count: inspections.length, color: '#1e40af', bg: '#dbeafe', icon: 'fa-clipboard-check' },
-                    { label: appLang === 'vi' ? 'Tieu hao' : 'Costs', count: consumables.length, color: '#854d0e', bg: '#fef9c3', icon: 'fa-receipt' }
+                    { label: appLang === 'vi' ? 'Nhật ký' : 'Diary', count: diary.length, color: '#166534', bg: '#dcfce7', icon: 'fa-book' },
+                    { label: appLang === 'vi' ? 'Kiểm tra' : 'Inspections', count: inspections.length, color: '#1e40af', bg: '#dbeafe', icon: 'fa-clipboard-check' },
+                    { label: appLang === 'vi' ? 'Tiêu hao' : 'Costs', count: consumables.length, color: '#854d0e', bg: '#fef9c3', icon: 'fa-receipt' }
                 ].map(s => (
                     <div key={s.label} style={{ background: s.bg, borderRadius: '16px', padding: '16px', textAlign: 'center' }}>
                         <i className={`fas ${s.icon}`} style={{ fontSize: '20px', color: s.color }}></i>
@@ -550,34 +560,34 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
         <>
             {farmer ? (
                 <>
-                    <SectionCard title={appLang === 'vi' ? 'Chu ho mo hinh' : 'Model Owner'} icon="fa-user"
-                        action={canEdit ? <AddButton onClick={openEditFarmer} label={appLang === 'vi' ? 'Sua' : 'Edit'} /> : null}>
-                        <InfoRow label={appLang === 'vi' ? 'Ho ten' : 'Full name'} value={farmer.full_name} icon="fa-user" />
-                        <InfoRow label={appLang === 'vi' ? 'Ma' : 'Code'} value={farmer.farmer_code} icon="fa-id-badge" />
-                        <InfoRow label={appLang === 'vi' ? 'Gioi tinh' : 'Gender'} value={farmer.gender} icon="fa-venus-mars" />
-                        <InfoRow label={appLang === 'vi' ? 'Dan toc' : 'Ethnicity'} value={farmer.ethnicity} icon="fa-users" />
-                        <InfoRow label={appLang === 'vi' ? 'SDT' : 'Phone'} value={farmer.phone} icon="fa-phone" />
+                    <SectionCard title={appLang === 'vi' ? 'Chủ hộ mô hình' : 'Model Owner'} icon="fa-user"
+                        action={canEdit ? <AddButton onClick={openEditFarmer} label={appLang === 'vi' ? 'Sửa' : 'Edit'} /> : null}>
+                        <InfoRow label={appLang === 'vi' ? 'Họ tên' : 'Full name'} value={farmer.full_name} icon="fa-user" />
+                        <InfoRow label={appLang === 'vi' ? 'Mã' : 'Code'} value={farmer.farmer_code} icon="fa-id-badge" />
+                        <InfoRow label={appLang === 'vi' ? 'Giới tính' : 'Gender'} value={farmer.gender} icon="fa-venus-mars" />
+                        <InfoRow label={appLang === 'vi' ? 'Dân tộc' : 'Ethnicity'} value={farmer.ethnicity} icon="fa-users" />
+                        <InfoRow label={appLang === 'vi' ? 'SĐT' : 'Phone'} value={farmer.phone} icon="fa-phone" />
                         <InfoRow label={appLang === 'vi' ? 'CMND/CCCD' : 'ID Card'} value={farmer.id_card} icon="fa-id-card" />
-                        <InfoRow label={appLang === 'vi' ? 'Thon' : 'Village'} value={farmer.village} icon="fa-home" />
-                        <InfoRow label={appLang === 'vi' ? 'Xa' : 'Commune'} value={farmer.commune} icon="fa-map" />
-                        <InfoRow label={appLang === 'vi' ? 'Huyen' : 'District'} value={farmer.district} icon="fa-map-signs" />
-                        <InfoRow label={appLang === 'vi' ? 'Tinh' : 'Province'} value={farmer.province} icon="fa-globe" />
-                        <InfoRow label={appLang === 'vi' ? 'Kinh te ho' : 'Economic class'} value={farmer.economic_class} icon="fa-chart-bar" />
-                        <InfoRow label={appLang === 'vi' ? 'Nam trong ca phe' : 'Coffee experience'} value={farmer.coffee_years ? `${farmer.coffee_years} ${appLang === 'vi' ? 'nam' : 'years'}` : null} icon="fa-coffee" />
-                        <InfoRow label={appLang === 'vi' ? 'Hoc van' : 'Education'} value={farmer.education} icon="fa-graduation-cap" />
-                        <InfoRow label={appLang === 'vi' ? 'Thanh vien HTX' : 'Coop member'} value={farmer.cooperative_member ? (appLang === 'vi' ? 'Co' : 'Yes') : (appLang === 'vi' ? 'Khong' : 'No')} icon="fa-handshake" />
-                        <InfoRow label={appLang === 'vi' ? 'So thanh vien ho' : 'Household size'} value={farmer.household_members} icon="fa-people-arrows" />
+                        <InfoRow label={appLang === 'vi' ? 'Thôn' : 'Village'} value={farmer.village} icon="fa-home" />
+                        <InfoRow label={appLang === 'vi' ? 'Xã' : 'Commune'} value={farmer.commune} icon="fa-map" />
+                        <InfoRow label={appLang === 'vi' ? 'Huyện' : 'District'} value={farmer.district} icon="fa-map-signs" />
+                        <InfoRow label={appLang === 'vi' ? 'Tỉnh' : 'Province'} value={farmer.province} icon="fa-globe" />
+                        <InfoRow label={appLang === 'vi' ? 'Kinh tế hộ' : 'Economic class'} value={farmer.economic_class} icon="fa-chart-bar" />
+                        <InfoRow label={appLang === 'vi' ? 'Năm trồng cà phê' : 'Coffee experience'} value={farmer.coffee_years ? `${farmer.coffee_years} ${appLang === 'vi' ? 'năm' : 'years'}` : null} icon="fa-coffee" />
+                        <InfoRow label={appLang === 'vi' ? 'Học vấn' : 'Education'} value={farmer.education} icon="fa-graduation-cap" />
+                        <InfoRow label={appLang === 'vi' ? 'Thành viên HTX' : 'Coop member'} value={farmer.cooperative_member ? (appLang === 'vi' ? 'Có' : 'Yes') : (appLang === 'vi' ? 'Không' : 'No')} icon="fa-handshake" />
+                        <InfoRow label={appLang === 'vi' ? 'Số thành viên hộ' : 'Household size'} value={farmer.household_members} icon="fa-people-arrows" />
                     </SectionCard>
 
                     {members.length > 0 && (
-                        <SectionCard title={`${appLang === 'vi' ? 'Thanh vien ho' : 'Household'} (${members.length})`} icon="fa-people-arrows">
+                        <SectionCard title={`${appLang === 'vi' ? 'Thành viên hộ' : 'Household'} (${members.length})`} icon="fa-people-arrows">
                             <table style={{ width: '100%', fontSize: '12px', borderCollapse: 'collapse' }}>
                                 <thead>
                                     <tr style={{ background: '#f8fafc' }}>
-                                        <th style={{ padding: '8px', textAlign: 'left' }}>{appLang === 'vi' ? 'Ten' : 'Name'}</th>
+                                        <th style={{ padding: '8px', textAlign: 'left' }}>{appLang === 'vi' ? 'Tên' : 'Name'}</th>
                                         <th style={{ padding: '8px' }}>{appLang === 'vi' ? 'GT' : 'Gender'}</th>
-                                        <th style={{ padding: '8px' }}>{appLang === 'vi' ? 'Nam sinh' : 'Birth'}</th>
-                                        <th style={{ padding: '8px' }}>{appLang === 'vi' ? 'Quan he' : 'Relation'}</th>
+                                        <th style={{ padding: '8px' }}>{appLang === 'vi' ? 'Năm sinh' : 'Birth'}</th>
+                                        <th style={{ padding: '8px' }}>{appLang === 'vi' ? 'Quan hệ' : 'Relation'}</th>
                                         <th style={{ padding: '8px' }}>{appLang === 'vi' ? 'Tham gia SX' : 'Farming'}</th>
                                     </tr>
                                 </thead>
@@ -599,48 +609,48 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                     )}
 
                     {income && (
-                        <SectionCard title={`${appLang === 'vi' ? 'Thu nhap nam' : 'Income'} ${income.year || 2025}`} icon="fa-coins">
-                            <InfoRow label={appLang === 'vi' ? 'Tong thu nhap rong' : 'Net income'} value={income.total_income ? `${income.total_income} tr.d` : null} icon="fa-wallet" />
-                            <InfoRow label={appLang === 'vi' ? 'Tu ca phe (rong)' : 'Coffee net'} value={income.coffee_net ? `${income.coffee_net} tr.d` : null} icon="fa-mug-hot" />
-                            <InfoRow label={appLang === 'vi' ? 'Doanh thu ca phe' : 'Coffee revenue'} value={income.coffee_revenue ? `${income.coffee_revenue} tr.d` : null} icon="fa-arrow-up" />
-                            <InfoRow label={appLang === 'vi' ? 'Chi phi ca phe' : 'Coffee cost'} value={income.coffee_cost ? `${income.coffee_cost} tr.d` : null} icon="fa-arrow-down" />
-                            <InfoRow label={appLang === 'vi' ? 'San luong' : 'Production'} value={income.production_tons ? `${income.production_tons} ${appLang === 'vi' ? 'tan' : 'tons'}` : null} icon="fa-box" />
-                            <InfoRow label={appLang === 'vi' ? 'Ty trong NN' : 'Agri ratio'} value={income.agri_income_ratio ? `${(income.agri_income_ratio * 100).toFixed(0)}%` : null} icon="fa-percent" />
+                        <SectionCard title={`${appLang === 'vi' ? 'Thu nhập năm' : 'Income'} ${income.year || 2025}`} icon="fa-coins">
+                            <InfoRow label={appLang === 'vi' ? 'Tổng thu nhập ròng' : 'Net income'} value={income.total_income ? `${income.total_income} tr.đ` : null} icon="fa-wallet" />
+                            <InfoRow label={appLang === 'vi' ? 'Từ cà phê (ròng)' : 'Coffee net'} value={income.coffee_net ? `${income.coffee_net} tr.đ` : null} icon="fa-mug-hot" />
+                            <InfoRow label={appLang === 'vi' ? 'Doanh thu cà phê' : 'Coffee revenue'} value={income.coffee_revenue ? `${income.coffee_revenue} tr.đ` : null} icon="fa-arrow-up" />
+                            <InfoRow label={appLang === 'vi' ? 'Chi phí cà phê' : 'Coffee cost'} value={income.coffee_cost ? `${income.coffee_cost} tr.đ` : null} icon="fa-arrow-down" />
+                            <InfoRow label={appLang === 'vi' ? 'Sản lượng' : 'Production'} value={income.production_tons ? `${income.production_tons} ${appLang === 'vi' ? 'tấn' : 'tons'}` : null} icon="fa-box" />
+                            <InfoRow label={appLang === 'vi' ? 'Tỷ trọng NN' : 'Agri ratio'} value={income.agri_income_ratio ? `${(income.agri_income_ratio * 100).toFixed(0)}%` : null} icon="fa-percent" />
                         </SectionCard>
                     )}
                 </>
             ) : (
                 <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
                     <i className="fas fa-user-slash" style={{ fontSize: '40px', marginBottom: '15px' }}></i>
-                    <p>{appLang === 'vi' ? 'Chua gan nong ho cho mo hinh nay' : 'No farmer assigned yet'}</p>
+                    <p>{appLang === 'vi' ? 'Chưa gán nông hộ cho mô hình này' : 'No farmer assigned yet'}</p>
                 </div>
             )}
 
             {/* Farmer Edit Modal */}
             <ModalOverlay
                 show={showFarmerForm}
-                title={appLang === 'vi' ? 'Cap nhat thong tin nong ho' : 'Update Farmer Info'}
+                title={appLang === 'vi' ? 'Cập nhật thông tin nông hộ' : 'Update Farmer Info'}
                 onClose={() => setShowFarmerForm(false)}
                 onSave={handleSaveFarmer}
             >
-                <FormField label={appLang === 'vi' ? 'Ho ten' : 'Full Name'} required>
+                <FormField label={appLang === 'vi' ? 'Họ tên' : 'Full Name'} required>
                     <input value={farmerForm.full_name || ''} onChange={e => setFarmerForm({ ...farmerForm, full_name: e.target.value })} style={inputStyle} />
                 </FormField>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Gioi tinh' : 'Gender'}>
+                    <FormField label={appLang === 'vi' ? 'Giới tính' : 'Gender'}>
                         <select value={farmerForm.gender || ''} onChange={e => setFarmerForm({ ...farmerForm, gender: e.target.value })} style={selectStyle}>
                             <option value="">--</option>
                             <option value="Nam">{appLang === 'vi' ? 'Nam' : 'Male'}</option>
-                            <option value="Nu">{appLang === 'vi' ? 'Nu' : 'Female'}</option>
-                            <option value="Khac">{appLang === 'vi' ? 'Khac' : 'Other'}</option>
+                            <option value="Nữ">{appLang === 'vi' ? 'Nữ' : 'Female'}</option>
+                            <option value="Khác">{appLang === 'vi' ? 'Khác' : 'Other'}</option>
                         </select>
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'Dan toc' : 'Ethnicity'}>
+                    <FormField label={appLang === 'vi' ? 'Dân tộc' : 'Ethnicity'}>
                         <input value={farmerForm.ethnicity || ''} onChange={e => setFarmerForm({ ...farmerForm, ethnicity: e.target.value })} style={inputStyle} placeholder="Kinh, Ede, Jarai..." />
                     </FormField>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'SDT' : 'Phone'}>
+                    <FormField label={appLang === 'vi' ? 'SĐT' : 'Phone'}>
                         <input value={farmerForm.phone || ''} onChange={e => setFarmerForm({ ...farmerForm, phone: e.target.value })} style={inputStyle} placeholder="09xx..." />
                     </FormField>
                     <FormField label={appLang === 'vi' ? 'CMND/CCCD' : 'ID Card'}>
@@ -648,50 +658,50 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                     </FormField>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Thon' : 'Village'}>
+                    <FormField label={appLang === 'vi' ? 'Thôn' : 'Village'}>
                         <input value={farmerForm.village || ''} onChange={e => setFarmerForm({ ...farmerForm, village: e.target.value })} style={inputStyle} />
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'Xa' : 'Commune'}>
+                    <FormField label={appLang === 'vi' ? 'Xã' : 'Commune'}>
                         <input value={farmerForm.commune || ''} onChange={e => setFarmerForm({ ...farmerForm, commune: e.target.value })} style={inputStyle} />
                     </FormField>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Huyen' : 'District'}>
+                    <FormField label={appLang === 'vi' ? 'Huyện' : 'District'}>
                         <input value={farmerForm.district || ''} onChange={e => setFarmerForm({ ...farmerForm, district: e.target.value })} style={inputStyle} />
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'Tinh' : 'Province'}>
+                    <FormField label={appLang === 'vi' ? 'Tỉnh' : 'Province'}>
                         <input value={farmerForm.province || ''} onChange={e => setFarmerForm({ ...farmerForm, province: e.target.value })} style={inputStyle} />
                     </FormField>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Kinh te ho' : 'Economic Class'}>
+                    <FormField label={appLang === 'vi' ? 'Kinh tế hộ' : 'Economic Class'}>
                         <select value={farmerForm.economic_class || ''} onChange={e => setFarmerForm({ ...farmerForm, economic_class: e.target.value })} style={selectStyle}>
                             <option value="">--</option>
-                            <option value="Ngheo">{appLang === 'vi' ? 'Ngheo' : 'Poor'}</option>
-                            <option value="Can ngheo">{appLang === 'vi' ? 'Can ngheo' : 'Near poor'}</option>
-                            <option value="Binh thuong">{appLang === 'vi' ? 'Binh thuong' : 'Average'}</option>
-                            <option value="Kha">{appLang === 'vi' ? 'Kha' : 'Above avg'}</option>
+                            <option value="Nghèo">{appLang === 'vi' ? 'Nghèo' : 'Poor'}</option>
+                            <option value="Cận nghèo">{appLang === 'vi' ? 'Cận nghèo' : 'Near poor'}</option>
+                            <option value="Bình thường">{appLang === 'vi' ? 'Bình thường' : 'Average'}</option>
+                            <option value="Khá">{appLang === 'vi' ? 'Khá' : 'Above avg'}</option>
                         </select>
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'Hoc van' : 'Education'}>
-                        <input value={farmerForm.education || ''} onChange={e => setFarmerForm({ ...farmerForm, education: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Lop 9, THPT...' : '9th grade, high school...'} />
+                    <FormField label={appLang === 'vi' ? 'Học vấn' : 'Education'}>
+                        <input value={farmerForm.education || ''} onChange={e => setFarmerForm({ ...farmerForm, education: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Lớp 9, THPT...' : '9th grade, high school...'} />
                     </FormField>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Nam trong ca phe' : 'Coffee years'}>
+                    <FormField label={appLang === 'vi' ? 'Năm trồng cà phê' : 'Coffee years'}>
                         <input type="number" value={farmerForm.coffee_years || ''} onChange={e => setFarmerForm({ ...farmerForm, coffee_years: e.target.value })} style={inputStyle} />
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'So thanh vien ho' : 'Household size'}>
+                    <FormField label={appLang === 'vi' ? 'Số thành viên hộ' : 'Household size'}>
                         <input type="number" value={farmerForm.household_members || ''} onChange={e => setFarmerForm({ ...farmerForm, household_members: e.target.value })} style={inputStyle} />
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'Thanh vien HTX' : 'Coop member'}>
+                    <FormField label={appLang === 'vi' ? 'Thành viên HTX' : 'Coop member'}>
                         <label style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 0', cursor: 'pointer' }}>
                             <input type="checkbox" checked={farmerForm.cooperative_member || false} onChange={e => setFarmerForm({ ...farmerForm, cooperative_member: e.target.checked })} />
-                            <span style={{ fontSize: '13px' }}>{appLang === 'vi' ? 'Co' : 'Yes'}</span>
+                            <span style={{ fontSize: '13px' }}>{appLang === 'vi' ? 'Có' : 'Yes'}</span>
                         </label>
                     </FormField>
                 </div>
-                <FormField label={appLang === 'vi' ? 'Ghi chu' : 'Notes'}>
+                <FormField label={appLang === 'vi' ? 'Ghi chú' : 'Notes'}>
                     <textarea value={farmerForm.notes || ''} onChange={e => setFarmerForm({ ...farmerForm, notes: e.target.value })}
                         style={{ ...inputStyle, minHeight: '60px', resize: 'vertical' }} />
                 </FormField>
@@ -702,40 +712,40 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
     const renderFarm = () => (
         <>
             {farm ? (
-                <SectionCard title={appLang === 'vi' ? 'Trang trai tham gia mo hinh' : 'Farm in Model'} icon="fa-map-marked-alt"
-                    action={canEdit ? <AddButton onClick={openEditFarm} label={appLang === 'vi' ? 'Sua' : 'Edit'} /> : null}>
-                    <InfoRow label={appLang === 'vi' ? 'Ten' : 'Name'} value={farm.farm_name} icon="fa-tag" />
-                    <InfoRow label={appLang === 'vi' ? 'Tong DT' : 'Total area'} value={farm.total_area ? `${farm.total_area} ha` : null} icon="fa-ruler" />
-                    <InfoRow label={appLang === 'vi' ? 'DT ca phe' : 'Coffee area'} value={farm.coffee_area ? `${farm.coffee_area} ha` : null} icon="fa-leaf" />
+                <SectionCard title={appLang === 'vi' ? 'Trang trại tham gia mô hình' : 'Farm in Model'} icon="fa-map-marked-alt"
+                    action={canEdit ? <AddButton onClick={openEditFarm} label={appLang === 'vi' ? 'Sửa' : 'Edit'} /> : null}>
+                    <InfoRow label={appLang === 'vi' ? 'Tên' : 'Name'} value={farm.farm_name} icon="fa-tag" />
+                    <InfoRow label={appLang === 'vi' ? 'Tổng DT' : 'Total area'} value={farm.total_area ? `${farm.total_area} ha` : null} icon="fa-ruler" />
+                    <InfoRow label={appLang === 'vi' ? 'DT cà phê' : 'Coffee area'} value={farm.coffee_area ? `${farm.coffee_area} ha` : null} icon="fa-leaf" />
                     <InfoRow label={appLang === 'vi' ? 'DT xen canh' : 'Intercrop area'} value={farm.intercrop_area ? `${farm.intercrop_area} ha` : null} icon="fa-tree" />
-                    <InfoRow label={appLang === 'vi' ? 'Cay xen' : 'Intercrop'} value={farm.intercrop_details} icon="fa-seedling" />
+                    <InfoRow label={appLang === 'vi' ? 'Cây xen' : 'Intercrop'} value={farm.intercrop_details} icon="fa-seedling" />
                     <InfoRow label="pH" value={farm.soil_ph} icon="fa-flask" />
-                    <InfoRow label={appLang === 'vi' ? 'Loai dat' : 'Soil type'} value={farm.soil_type} icon="fa-mountain" />
-                    <InfoRow label={appLang === 'vi' ? 'Do doc' : 'Slope'} value={farm.slope} icon="fa-signal" />
-                    <InfoRow label={appLang === 'vi' ? 'Nguon nuoc' : 'Water source'} value={farm.water_source} icon="fa-tint" />
-                    <InfoRow label={appLang === 'vi' ? 'Tuoi tieu' : 'Irrigation'} value={farm.irrigation_system} icon="fa-shower" />
-                    <InfoRow label={appLang === 'vi' ? 'Do cao' : 'Elevation'} value={farm.elevation ? `${farm.elevation}m` : null} icon="fa-arrow-up" />
+                    <InfoRow label={appLang === 'vi' ? 'Loại đất' : 'Soil type'} value={farm.soil_type} icon="fa-mountain" />
+                    <InfoRow label={appLang === 'vi' ? 'Độ dốc' : 'Slope'} value={farm.slope} icon="fa-signal" />
+                    <InfoRow label={appLang === 'vi' ? 'Nguồn nước' : 'Water source'} value={farm.water_source} icon="fa-tint" />
+                    <InfoRow label={appLang === 'vi' ? 'Tưới tiêu' : 'Irrigation'} value={farm.irrigation_system} icon="fa-shower" />
+                    <InfoRow label={appLang === 'vi' ? 'Độ cao' : 'Elevation'} value={farm.elevation ? `${farm.elevation}m` : null} icon="fa-arrow-up" />
                     <InfoRow label="GPS" value={farm.gps_lat && farm.gps_long ? `${farm.gps_lat}, ${farm.gps_long}` : null} icon="fa-map-pin" />
-                    <InfoRow label={appLang === 'vi' ? 'Co phu' : 'Grass cover'} value={farm.grass_cover} icon="fa-leaf" />
-                    <InfoRow label={appLang === 'vi' ? 'Cay bong mat' : 'Shade trees'} value={farm.shade_trees} icon="fa-tree" />
+                    <InfoRow label={appLang === 'vi' ? 'Cỏ phủ' : 'Grass cover'} value={farm.grass_cover} icon="fa-leaf" />
+                    <InfoRow label={appLang === 'vi' ? 'Cây bóng mát' : 'Shade trees'} value={farm.shade_trees} icon="fa-tree" />
                 </SectionCard>
             ) : (
                 <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
                     <i className="fas fa-map" style={{ fontSize: '40px', marginBottom: '15px' }}></i>
-                    <p>{appLang === 'vi' ? 'Chua gan trang trai' : 'No farm assigned yet'}</p>
+                    <p>{appLang === 'vi' ? 'Chưa gán trang trại' : 'No farm assigned yet'}</p>
                 </div>
             )}
 
             {plots.length > 0 && (
-                <SectionCard title={`${appLang === 'vi' ? 'Cac manh dat cua ho' : 'Land Plots'} (${plots.length})`} icon="fa-th-large">
+                <SectionCard title={`${appLang === 'vi' ? 'Các mảnh đất của hộ' : 'Land Plots'} (${plots.length})`} icon="fa-th-large">
                     {plots.map(p => (
                         <div key={p.id} style={{ padding: '10px 0', borderBottom: '1px solid #f1f5f9' }}>
-                            <div style={{ fontWeight: 700, fontSize: '13px', color: 'var(--coffee-dark)' }}>{p.plot_name || (appLang === 'vi' ? 'Manh dat' : 'Plot')}</div>
+                            <div style={{ fontWeight: 700, fontSize: '13px', color: 'var(--coffee-dark)' }}>{p.plot_name || (appLang === 'vi' ? 'Mảnh đất' : 'Plot')}</div>
                             <div style={{ display: 'flex', gap: '15px', fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
                                 <span>{p.area_ha} ha</span>
-                                {p.tree_count && <span>{p.tree_count} {appLang === 'vi' ? 'goc' : 'trees'}</span>}
+                                {p.tree_count && <span>{p.tree_count} {appLang === 'vi' ? 'gốc' : 'trees'}</span>}
                                 {p.yield_current && <span>{appLang === 'vi' ? 'SL' : 'Yield'}: {p.yield_current}</span>}
-                                {p.intercrop && <span>{appLang === 'vi' ? 'Xen' : 'Intercrop'}: {p.intercrop_species}</span>}
+                                {p.intercrop && <span>{appLang === 'vi' ? 'Xen canh' : 'Intercrop'}: {p.intercrop_species}</span>}
                             </div>
                         </div>
                     ))}
@@ -745,54 +755,54 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
             {/* Farm Edit Modal */}
             <ModalOverlay
                 show={showFarmForm}
-                title={appLang === 'vi' ? 'Cap nhat thong tin trang trai' : 'Update Farm Info'}
+                title={appLang === 'vi' ? 'Cập nhật thông tin trang trại' : 'Update Farm Info'}
                 onClose={() => setShowFarmForm(false)}
                 onSave={handleSaveFarm}
             >
-                <FormField label={appLang === 'vi' ? 'Ten trang trai' : 'Farm Name'}>
+                <FormField label={appLang === 'vi' ? 'Tên trang trại' : 'Farm Name'}>
                     <input value={farmForm.farm_name || ''} onChange={e => setFarmForm({ ...farmForm, farm_name: e.target.value })} style={inputStyle} />
                 </FormField>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Tong DT (ha)' : 'Total Area (ha)'}>
+                    <FormField label={appLang === 'vi' ? 'Tổng DT (ha)' : 'Total Area (ha)'}>
                         <input type="number" step="0.01" value={farmForm.total_area || ''} onChange={e => setFarmForm({ ...farmForm, total_area: e.target.value })} style={inputStyle} />
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'DT ca phe (ha)' : 'Coffee Area (ha)'}>
+                    <FormField label={appLang === 'vi' ? 'DT cà phê (ha)' : 'Coffee Area (ha)'}>
                         <input type="number" step="0.01" value={farmForm.coffee_area || ''} onChange={e => setFarmForm({ ...farmForm, coffee_area: e.target.value })} style={inputStyle} />
                     </FormField>
                     <FormField label={appLang === 'vi' ? 'DT xen canh (ha)' : 'Intercrop Area (ha)'}>
                         <input type="number" step="0.01" value={farmForm.intercrop_area || ''} onChange={e => setFarmForm({ ...farmForm, intercrop_area: e.target.value })} style={inputStyle} />
                     </FormField>
                 </div>
-                <FormField label={appLang === 'vi' ? 'Chi tiet xen canh' : 'Intercrop Details'}>
-                    <input value={farmForm.intercrop_details || ''} onChange={e => setFarmForm({ ...farmForm, intercrop_details: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Bo, sau rieng, tieu...' : 'Avocado, durian, pepper...'} />
+                <FormField label={appLang === 'vi' ? 'Chi tiết xen canh' : 'Intercrop Details'}>
+                    <input value={farmForm.intercrop_details || ''} onChange={e => setFarmForm({ ...farmForm, intercrop_details: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Bơ, sầu riêng, tiêu...' : 'Avocado, durian, pepper...'} />
                 </FormField>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Loai dat' : 'Soil Type'}>
-                        <input value={farmForm.soil_type || ''} onChange={e => setFarmForm({ ...farmForm, soil_type: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Bazan, phu sa...' : 'Basalt, alluvial...'} />
+                    <FormField label={appLang === 'vi' ? 'Loại đất' : 'Soil Type'}>
+                        <input value={farmForm.soil_type || ''} onChange={e => setFarmForm({ ...farmForm, soil_type: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Bazan, phù sa...' : 'Basalt, alluvial...'} />
                     </FormField>
                     <FormField label="pH">
                         <input type="number" step="0.1" value={farmForm.soil_ph || ''} onChange={e => setFarmForm({ ...farmForm, soil_ph: e.target.value })} style={inputStyle} />
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'Do doc' : 'Slope'}>
+                    <FormField label={appLang === 'vi' ? 'Độ dốc' : 'Slope'}>
                         <select value={farmForm.slope || ''} onChange={e => setFarmForm({ ...farmForm, slope: e.target.value })} style={selectStyle}>
                             <option value="">--</option>
-                            <option value="flat">{appLang === 'vi' ? 'Bang phang' : 'Flat'}</option>
-                            <option value="gentle">{appLang === 'vi' ? 'Thoai' : 'Gentle'}</option>
-                            <option value="moderate">{appLang === 'vi' ? 'Vua' : 'Moderate'}</option>
-                            <option value="steep">{appLang === 'vi' ? 'Doc' : 'Steep'}</option>
+                            <option value="flat">{appLang === 'vi' ? 'Bằng phẳng' : 'Flat'}</option>
+                            <option value="gentle">{appLang === 'vi' ? 'Thoải' : 'Gentle'}</option>
+                            <option value="moderate">{appLang === 'vi' ? 'Vừa' : 'Moderate'}</option>
+                            <option value="steep">{appLang === 'vi' ? 'Dốc' : 'Steep'}</option>
                         </select>
                     </FormField>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Nguon nuoc' : 'Water Source'}>
-                        <input value={farmForm.water_source || ''} onChange={e => setFarmForm({ ...farmForm, water_source: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Gieng, suoi, ho...' : 'Well, stream, pond...'} />
+                    <FormField label={appLang === 'vi' ? 'Nguồn nước' : 'Water Source'}>
+                        <input value={farmForm.water_source || ''} onChange={e => setFarmForm({ ...farmForm, water_source: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Giếng, suối, hồ...' : 'Well, stream, pond...'} />
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'He thong tuoi' : 'Irrigation'}>
-                        <input value={farmForm.irrigation_system || ''} onChange={e => setFarmForm({ ...farmForm, irrigation_system: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Nho giot, phun mua...' : 'Drip, sprinkler...'} />
+                    <FormField label={appLang === 'vi' ? 'Hệ thống tưới' : 'Irrigation'}>
+                        <input value={farmForm.irrigation_system || ''} onChange={e => setFarmForm({ ...farmForm, irrigation_system: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Nhỏ giọt, phun mưa...' : 'Drip, sprinkler...'} />
                     </FormField>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Do cao (m)' : 'Elevation (m)'}>
+                    <FormField label={appLang === 'vi' ? 'Độ cao (m)' : 'Elevation (m)'}>
                         <input type="number" value={farmForm.elevation || ''} onChange={e => setFarmForm({ ...farmForm, elevation: e.target.value })} style={inputStyle} />
                     </FormField>
                     <FormField label="GPS Lat">
@@ -803,19 +813,19 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                     </FormField>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Co phu' : 'Grass Cover'}>
+                    <FormField label={appLang === 'vi' ? 'Cỏ phủ' : 'Grass Cover'}>
                         <select value={farmForm.grass_cover || ''} onChange={e => setFarmForm({ ...farmForm, grass_cover: e.target.value })} style={selectStyle}>
                             <option value="">--</option>
-                            <option value="Low">{appLang === 'vi' ? 'Thap' : 'Low'}</option>
-                            <option value="Medium">{appLang === 'vi' ? 'Trung binh' : 'Medium'}</option>
+                            <option value="Low">{appLang === 'vi' ? 'Thấp' : 'Low'}</option>
+                            <option value="Medium">{appLang === 'vi' ? 'Trung bình' : 'Medium'}</option>
                             <option value="High">{appLang === 'vi' ? 'Cao' : 'High'}</option>
                         </select>
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'So cay bong mat' : 'Shade Trees'}>
+                    <FormField label={appLang === 'vi' ? 'Số cây bóng mát' : 'Shade Trees'}>
                         <input type="number" value={farmForm.shade_trees || ''} onChange={e => setFarmForm({ ...farmForm, shade_trees: e.target.value })} style={inputStyle} />
                     </FormField>
                 </div>
-                <FormField label={appLang === 'vi' ? 'Ghi chu' : 'Notes'}>
+                <FormField label={appLang === 'vi' ? 'Ghi chú' : 'Notes'}>
                     <textarea value={farmForm.notes || ''} onChange={e => setFarmForm({ ...farmForm, notes: e.target.value })}
                         style={{ ...inputStyle, minHeight: '60px', resize: 'vertical' }} />
                 </FormField>
@@ -827,13 +837,13 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
     const renderDiary = () => (
         <>
             <SectionCard
-                title={`${appLang === 'vi' ? 'Nhat ky canh tac' : 'Farm Diary'} (${diary.length})`}
+                title={`${appLang === 'vi' ? 'Nhật ký canh tác' : 'Farm Diary'} (${diary.length})`}
                 icon="fa-book"
                 action={canEdit ? <AddButton onClick={() => { setDiaryForm(emptyDiary); setEditingItem(null); setShowDiaryForm(true); }} /> : null}
             >
                 {diary.length === 0 ? (
                     <p style={{ textAlign: 'center', color: '#94a3b8', padding: '20px' }}>
-                        {appLang === 'vi' ? 'Chua co nhat ky nao.' : 'No diary entries yet.'}{canEdit ? (appLang === 'vi' ? ' Bam "Them" de bat dau ghi chep.' : ' Click "Add" to start.') : ''}
+                        {appLang === 'vi' ? 'Chưa có nhật ký nào.' : 'No diary entries yet.'}{canEdit ? (appLang === 'vi' ? ' Bấm "Thêm" để bắt đầu ghi chép.' : ' Click "Add" to start.') : ''}
                     </p>
                 ) : (
                     diary.map(d => (
@@ -859,12 +869,12 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                             <p style={{ fontSize: '13px', margin: '6px 0', color: '#475569' }}>{d.description}</p>
                             {d.material_name && (
                                 <div style={{ fontSize: '12px', color: '#64748b' }}>
-                                    {appLang === 'vi' ? 'Vat tu' : 'Material'}: {d.material_name} {d.material_amount && `- ${d.material_amount} ${d.material_unit || ''}`}
+                                    {appLang === 'vi' ? 'Vật tư' : 'Material'}: {d.material_name} {d.material_amount && `- ${d.material_amount} ${d.material_unit || ''}`}
                                 </div>
                             )}
                             {(d.labor_cost || d.material_cost) && (
                                 <div style={{ fontSize: '12px', color: '#dc2626', marginTop: '4px' }}>
-                                    {appLang === 'vi' ? 'Chi phi' : 'Cost'}: {((d.labor_cost || 0) + (d.material_cost || 0)).toLocaleString()} d
+                                    {appLang === 'vi' ? 'Chi phí' : 'Cost'}: {((d.labor_cost || 0) + (d.material_cost || 0)).toLocaleString()} đ
                                 </div>
                             )}
                         </div>
@@ -875,56 +885,56 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
             {/* Diary Form Modal */}
             <ModalOverlay
                 show={showDiaryForm}
-                title={editingItem ? (appLang === 'vi' ? 'Sua nhat ky' : 'Edit Diary') : (appLang === 'vi' ? 'Them nhat ky' : 'Add Diary Entry')}
+                title={editingItem ? (appLang === 'vi' ? 'Sửa nhật ký' : 'Edit Diary') : (appLang === 'vi' ? 'Thêm nhật ký' : 'Add Diary Entry')}
                 onClose={() => { setShowDiaryForm(false); setEditingItem(null); }}
                 onSave={handleSaveDiary}
             >
-                <FormField label={appLang === 'vi' ? 'Ngay' : 'Date'} required>
+                <FormField label={appLang === 'vi' ? 'Ngày' : 'Date'} required>
                     <input type="date" value={diaryForm.diary_date} onChange={e => setDiaryForm({ ...diaryForm, diary_date: e.target.value })} style={inputStyle} />
                 </FormField>
-                <FormField label={appLang === 'vi' ? 'Loai hoat dong' : 'Activity Type'} required>
+                <FormField label={appLang === 'vi' ? 'Loại hoạt động' : 'Activity Type'} required>
                     <select value={diaryForm.activity_type} onChange={e => setDiaryForm({ ...diaryForm, activity_type: e.target.value })} style={selectStyle}>
                         {ACTIVITY_TYPES.map(a => <option key={a.value} value={a.value}>{a[appLang] || a.vi}</option>)}
                     </select>
                 </FormField>
-                <FormField label={appLang === 'vi' ? 'Mo ta' : 'Description'} required>
+                <FormField label={appLang === 'vi' ? 'Mô tả' : 'Description'} required>
                     <textarea value={diaryForm.description} onChange={e => setDiaryForm({ ...diaryForm, description: e.target.value })}
-                        style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }} placeholder={appLang === 'vi' ? 'Mo ta cong viec...' : 'Describe the activity...'} />
+                        style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }} placeholder={appLang === 'vi' ? 'Mô tả công việc...' : 'Describe the activity...'} />
                 </FormField>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Vat tu' : 'Material'}>
+                    <FormField label={appLang === 'vi' ? 'Vật tư' : 'Material'}>
                         <input value={diaryForm.material_name} onChange={e => setDiaryForm({ ...diaryForm, material_name: e.target.value })} style={inputStyle} placeholder="NPK, DAP..." />
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'So luong' : 'Amount'}>
+                    <FormField label={appLang === 'vi' ? 'Số lượng' : 'Amount'}>
                         <input type="number" value={diaryForm.material_amount} onChange={e => setDiaryForm({ ...diaryForm, material_amount: e.target.value })} style={inputStyle} />
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'Don vi' : 'Unit'}>
-                        <input value={diaryForm.material_unit} onChange={e => setDiaryForm({ ...diaryForm, material_unit: e.target.value })} style={inputStyle} placeholder="kg, lit..." />
+                    <FormField label={appLang === 'vi' ? 'Đơn vị' : 'Unit'}>
+                        <input value={diaryForm.material_unit} onChange={e => setDiaryForm({ ...diaryForm, material_unit: e.target.value })} style={inputStyle} placeholder="kg, lít..." />
                     </FormField>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Gio cong' : 'Labor hrs'}>
+                    <FormField label={appLang === 'vi' ? 'Giờ công' : 'Labor hrs'}>
                         <input type="number" value={diaryForm.labor_hours} onChange={e => setDiaryForm({ ...diaryForm, labor_hours: e.target.value })} style={inputStyle} />
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'CP nhan cong' : 'Labor cost'}>
+                    <FormField label={appLang === 'vi' ? 'CP nhân công' : 'Labor cost'}>
                         <input type="number" value={diaryForm.labor_cost} onChange={e => setDiaryForm({ ...diaryForm, labor_cost: e.target.value })} style={inputStyle} />
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'CP vat tu' : 'Material cost'}>
+                    <FormField label={appLang === 'vi' ? 'CP vật tư' : 'Material cost'}>
                         <input type="number" value={diaryForm.material_cost} onChange={e => setDiaryForm({ ...diaryForm, material_cost: e.target.value })} style={inputStyle} />
                     </FormField>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Thoi tiet' : 'Weather'}>
-                        <input value={diaryForm.weather} onChange={e => setDiaryForm({ ...diaryForm, weather: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Nang, mua...' : 'Sunny, rainy...'} />
+                    <FormField label={appLang === 'vi' ? 'Thời tiết' : 'Weather'}>
+                        <input value={diaryForm.weather} onChange={e => setDiaryForm({ ...diaryForm, weather: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Nắng, mưa...' : 'Sunny, rainy...'} />
                     </FormField>
                     <FormField label="GCP">
                         <label style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 0', cursor: 'pointer' }}>
                             <input type="checkbox" checked={diaryForm.gcp_compliant} onChange={e => setDiaryForm({ ...diaryForm, gcp_compliant: e.target.checked })} />
-                            <span style={{ fontSize: '13px' }}>{appLang === 'vi' ? 'Tuan thu GCP' : 'GCP Compliant'}</span>
+                            <span style={{ fontSize: '13px' }}>{appLang === 'vi' ? 'Tuân thủ GCP' : 'GCP Compliant'}</span>
                         </label>
                     </FormField>
                 </div>
-                <FormField label={appLang === 'vi' ? 'Ghi chu' : 'Notes'}>
+                <FormField label={appLang === 'vi' ? 'Ghi chú' : 'Notes'}>
                     <input value={diaryForm.notes} onChange={e => setDiaryForm({ ...diaryForm, notes: e.target.value })} style={inputStyle} />
                 </FormField>
             </ModalOverlay>
@@ -935,13 +945,13 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
     const renderInspections = () => (
         <>
             <SectionCard
-                title={`${appLang === 'vi' ? 'Kiem tra dinh ky' : 'Inspections'} (${inspections.length})`}
+                title={`${appLang === 'vi' ? 'Kiểm tra định kỳ' : 'Inspections'} (${inspections.length})`}
                 icon="fa-clipboard-check"
                 action={canEdit ? <AddButton onClick={() => { setInspectForm(emptyInspect); setEditingItem(null); setShowInspectForm(true); }} /> : null}
             >
                 {inspections.length === 0 ? (
                     <p style={{ textAlign: 'center', color: '#94a3b8', padding: '20px' }}>
-                        {appLang === 'vi' ? 'Chua co kiem tra nao.' : 'No inspections yet.'}{canEdit ? (appLang === 'vi' ? ' Bam "Them" de them.' : ' Click "Add" to start.') : ''}
+                        {appLang === 'vi' ? 'Chưa có kiểm tra nào.' : 'No inspections yet.'}{canEdit ? (appLang === 'vi' ? ' Bấm "Thêm" để thêm.' : ' Click "Add" to start.') : ''}
                     </p>
                 ) : (
                     inspections.map(ins => (
@@ -967,14 +977,14 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                                 </div>
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', fontSize: '12px' }}>
-                                <div>{appLang === 'vi' ? 'Sinh truong' : 'Growth'}: <b>{QUALITY_OPTIONS.find(q => q.value === ins.growth_quality)?.[appLang] || ins.growth_quality || '-'}</b></div>
-                                <div>{appLang === 'vi' ? 'Sau benh' : 'Pests'}: <b>{PEST_OPTIONS.find(q => q.value === ins.pest_status)?.[appLang] || ins.pest_status || '-'}</b></div>
-                                <div>{appLang === 'vi' ? 'Dat' : 'Soil'}: <b>{QUALITY_OPTIONS.find(q => q.value === ins.soil_condition)?.[appLang] || ins.soil_condition || '-'}</b></div>
-                                <div>{appLang === 'vi' ? 'Nuoc' : 'Water'}: <b>{WATER_OPTIONS.find(q => q.value === ins.water_status)?.[appLang] || ins.water_status || '-'}</b></div>
+                                <div>{appLang === 'vi' ? 'Sinh trưởng' : 'Growth'}: <b>{QUALITY_OPTIONS.find(q => q.value === ins.growth_quality)?.[appLang] || ins.growth_quality || '-'}</b></div>
+                                <div>{appLang === 'vi' ? 'Sâu bệnh' : 'Pests'}: <b>{PEST_OPTIONS.find(q => q.value === ins.pest_status)?.[appLang] || ins.pest_status || '-'}</b></div>
+                                <div>{appLang === 'vi' ? 'Đất' : 'Soil'}: <b>{QUALITY_OPTIONS.find(q => q.value === ins.soil_condition)?.[appLang] || ins.soil_condition || '-'}</b></div>
+                                <div>{appLang === 'vi' ? 'Nước' : 'Water'}: <b>{WATER_OPTIONS.find(q => q.value === ins.water_status)?.[appLang] || ins.water_status || '-'}</b></div>
                             </div>
                             {ins.recommendations && (
                                 <div style={{ marginTop: '8px', fontSize: '12px', color: '#475569', fontStyle: 'italic' }}>
-                                    {appLang === 'vi' ? 'Khuyen nghi' : 'Recommendations'}: {ins.recommendations}
+                                    {appLang === 'vi' ? 'Khuyến nghị' : 'Recommendations'}: {ins.recommendations}
                                 </div>
                             )}
                         </div>
@@ -985,28 +995,28 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
             {/* Inspection Form Modal */}
             <ModalOverlay
                 show={showInspectForm}
-                title={editingItem ? (appLang === 'vi' ? 'Sua kiem tra' : 'Edit Inspection') : (appLang === 'vi' ? 'Them kiem tra' : 'Add Inspection')}
+                title={editingItem ? (appLang === 'vi' ? 'Sửa kiểm tra' : 'Edit Inspection') : (appLang === 'vi' ? 'Thêm kiểm tra' : 'Add Inspection')}
                 onClose={() => { setShowInspectForm(false); setEditingItem(null); }}
                 onSave={handleSaveInspect}
             >
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Ngay kiem tra' : 'Date'} required>
+                    <FormField label={appLang === 'vi' ? 'Ngày kiểm tra' : 'Date'} required>
                         <input type="date" value={inspectForm.inspection_date} onChange={e => setInspectForm({ ...inspectForm, inspection_date: e.target.value })} style={inputStyle} />
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'Loai' : 'Type'} required>
+                    <FormField label={appLang === 'vi' ? 'Loại' : 'Type'} required>
                         <select value={inspectForm.inspection_type} onChange={e => setInspectForm({ ...inspectForm, inspection_type: e.target.value })} style={selectStyle}>
                             {INSPECTION_TYPES.map(t => <option key={t.value} value={t.value}>{t[appLang] || t.vi}</option>)}
                         </select>
                     </FormField>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Sinh truong' : 'Growth Quality'}>
+                    <FormField label={appLang === 'vi' ? 'Sinh trưởng' : 'Growth Quality'}>
                         <select value={inspectForm.growth_quality} onChange={e => setInspectForm({ ...inspectForm, growth_quality: e.target.value })} style={selectStyle}>
                             <option value="">--</option>
                             {QUALITY_OPTIONS.map(q => <option key={q.value} value={q.value}>{q[appLang] || q.vi}</option>)}
                         </select>
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'Sau benh' : 'Pest Status'}>
+                    <FormField label={appLang === 'vi' ? 'Sâu bệnh' : 'Pest Status'}>
                         <select value={inspectForm.pest_status} onChange={e => setInspectForm({ ...inspectForm, pest_status: e.target.value })} style={selectStyle}>
                             <option value="">--</option>
                             {PEST_OPTIONS.map(q => <option key={q.value} value={q.value}>{q[appLang] || q.vi}</option>)}
@@ -1014,13 +1024,13 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                     </FormField>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Tinh trang dat' : 'Soil Condition'}>
+                    <FormField label={appLang === 'vi' ? 'Tình trạng đất' : 'Soil Condition'}>
                         <select value={inspectForm.soil_condition} onChange={e => setInspectForm({ ...inspectForm, soil_condition: e.target.value })} style={selectStyle}>
                             <option value="">--</option>
                             {QUALITY_OPTIONS.map(q => <option key={q.value} value={q.value}>{q[appLang] || q.vi}</option>)}
                         </select>
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'Tinh trang nuoc' : 'Water Status'}>
+                    <FormField label={appLang === 'vi' ? 'Tình trạng nước' : 'Water Status'}>
                         <select value={inspectForm.water_status} onChange={e => setInspectForm({ ...inspectForm, water_status: e.target.value })} style={selectStyle}>
                             <option value="">--</option>
                             {WATER_OPTIONS.map(q => <option key={q.value} value={q.value}>{q[appLang] || q.vi}</option>)}
@@ -1028,29 +1038,29 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                     </FormField>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <FormField label={appLang === 'vi' ? 'Chat luong qua' : 'Fruit Quality'}>
+                    <FormField label={appLang === 'vi' ? 'Chất lượng quả' : 'Fruit Quality'}>
                         <select value={inspectForm.fruit_quality} onChange={e => setInspectForm({ ...inspectForm, fruit_quality: e.target.value })} style={selectStyle}>
                             <option value="">--</option>
                             {QUALITY_OPTIONS.map(q => <option key={q.value} value={q.value}>{q[appLang] || q.vi}</option>)}
                         </select>
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'Suc khoe cay (%)' : 'Tree Health %'}>
+                    <FormField label={appLang === 'vi' ? 'Sức khỏe cây (%)' : 'Tree Health %'}>
                         <input type="number" min="0" max="100" value={inspectForm.tree_health_pct} onChange={e => setInspectForm({ ...inspectForm, tree_health_pct: e.target.value })} style={inputStyle} />
                     </FormField>
                 </div>
                 {inspectForm.pest_status && inspectForm.pest_status !== 'none' && (
-                    <FormField label={appLang === 'vi' ? 'Chi tiet sau benh' : 'Pest Details'}>
-                        <input value={inspectForm.pest_details} onChange={e => setInspectForm({ ...inspectForm, pest_details: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Loai sau, muc do...' : 'Pest type, severity...'} />
+                    <FormField label={appLang === 'vi' ? 'Chi tiết sâu bệnh' : 'Pest Details'}>
+                        <input value={inspectForm.pest_details} onChange={e => setInspectForm({ ...inspectForm, pest_details: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'Loại sâu, mức độ...' : 'Pest type, severity...'} />
                     </FormField>
                 )}
-                <FormField label={appLang === 'vi' ? 'Khuyen nghi' : 'Recommendations'}>
+                <FormField label={appLang === 'vi' ? 'Khuyến nghị' : 'Recommendations'}>
                     <textarea value={inspectForm.recommendations} onChange={e => setInspectForm({ ...inspectForm, recommendations: e.target.value })}
-                        style={{ ...inputStyle, minHeight: '60px', resize: 'vertical' }} placeholder={appLang === 'vi' ? 'De xuat hanh dong...' : 'Suggested actions...'} />
+                        style={{ ...inputStyle, minHeight: '60px', resize: 'vertical' }} placeholder={appLang === 'vi' ? 'Đề xuất hành động...' : 'Suggested actions...'} />
                 </FormField>
-                <FormField label={appLang === 'vi' ? 'Hanh dong tiep theo' : 'Follow-up Actions'}>
+                <FormField label={appLang === 'vi' ? 'Hành động tiếp theo' : 'Follow-up Actions'}>
                     <input value={inspectForm.follow_up_actions} onChange={e => setInspectForm({ ...inspectForm, follow_up_actions: e.target.value })} style={inputStyle} />
                 </FormField>
-                <FormField label={appLang === 'vi' ? 'Ghi chu' : 'Notes'}>
+                <FormField label={appLang === 'vi' ? 'Ghi chú' : 'Notes'}>
                     <input value={inspectForm.notes} onChange={e => setInspectForm({ ...inspectForm, notes: e.target.value })} style={inputStyle} />
                 </FormField>
             </ModalOverlay>
@@ -1071,13 +1081,13 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                     background: 'linear-gradient(135deg, #92400e, #d97706)', borderRadius: '16px',
                     padding: '20px', color: 'white', textAlign: 'center', marginBottom: '16px'
                 }}>
-                    <div style={{ fontSize: '12px', opacity: 0.9 }}>{appLang === 'vi' ? 'Tong tieu hao' : 'Total Costs'}</div>
+                    <div style={{ fontSize: '12px', opacity: 0.9 }}>{appLang === 'vi' ? 'Tổng tiêu hao' : 'Total Costs'}</div>
                     <div style={{ fontSize: '32px', fontWeight: 800 }}>{totalCost.toLocaleString()}</div>
                     <div style={{ fontSize: '12px', opacity: 0.8 }}>VND</div>
                 </div>
 
                 {Object.keys(byCat).length > 0 && (
-                    <SectionCard title={appLang === 'vi' ? 'Theo danh muc' : 'By Category'} icon="fa-layer-group">
+                    <SectionCard title={appLang === 'vi' ? 'Theo danh mục' : 'By Category'} icon="fa-layer-group">
                         {Object.entries(byCat).map(([cat, total]) => (
                             <div key={cat} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #f1f5f9' }}>
                                 <span style={{ fontSize: '13px', textTransform: 'capitalize' }}>
@@ -1090,13 +1100,13 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                 )}
 
                 <SectionCard
-                    title={`${appLang === 'vi' ? 'Chi tiet' : 'Details'} (${consumables.length})`}
+                    title={`${appLang === 'vi' ? 'Chi tiết' : 'Details'} (${consumables.length})`}
                     icon="fa-receipt"
                     action={canEdit ? <AddButton onClick={() => { setConsumForm(emptyConsum); setEditingItem(null); setShowConsumForm(true); }} /> : null}
                 >
                     {consumables.length === 0 ? (
                         <p style={{ textAlign: 'center', color: '#94a3b8', padding: '20px' }}>
-                            {appLang === 'vi' ? 'Chua co du lieu.' : 'No data yet.'}{canEdit ? (appLang === 'vi' ? ' Bam "Them" de them.' : ' Click "Add" to start.') : ''}
+                            {appLang === 'vi' ? 'Chưa có dữ liệu.' : 'No data yet.'}{canEdit ? (appLang === 'vi' ? ' Bấm "Thêm" để thêm.' : ' Click "Add" to start.') : ''}
                         </p>
                     ) : (
                         consumables.map(c => (
@@ -1124,39 +1134,39 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                 {/* Consumable Form Modal */}
                 <ModalOverlay
                     show={showConsumForm}
-                    title={editingItem ? (appLang === 'vi' ? 'Sua tieu hao' : 'Edit Cost') : (appLang === 'vi' ? 'Them tieu hao' : 'Add Cost')}
+                    title={editingItem ? (appLang === 'vi' ? 'Sửa tiêu hao' : 'Edit Cost') : (appLang === 'vi' ? 'Thêm tiêu hao' : 'Add Cost')}
                     onClose={() => { setShowConsumForm(false); setEditingItem(null); }}
                     onSave={handleSaveConsum}
                 >
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                        <FormField label={appLang === 'vi' ? 'Ngay' : 'Date'} required>
+                        <FormField label={appLang === 'vi' ? 'Ngày' : 'Date'} required>
                             <input type="date" value={consumForm.record_date} onChange={e => setConsumForm({ ...consumForm, record_date: e.target.value })} style={inputStyle} />
                         </FormField>
-                        <FormField label={appLang === 'vi' ? 'Danh muc' : 'Category'} required>
+                        <FormField label={appLang === 'vi' ? 'Danh mục' : 'Category'} required>
                             <select value={consumForm.category} onChange={e => setConsumForm({ ...consumForm, category: e.target.value })} style={selectStyle}>
                                 {CONSUMABLE_CATEGORIES.map(c => <option key={c.value} value={c.value}>{c[appLang] || c.vi}</option>)}
                             </select>
                         </FormField>
                     </div>
-                    <FormField label={appLang === 'vi' ? 'Ten hang muc' : 'Item Name'} required>
+                    <FormField label={appLang === 'vi' ? 'Tên hạng mục' : 'Item Name'} required>
                         <input value={consumForm.item_name} onChange={e => setConsumForm({ ...consumForm, item_name: e.target.value })} style={inputStyle} placeholder={appLang === 'vi' ? 'VD: NPK 16-16-8' : 'e.g. NPK 16-16-8'} />
                     </FormField>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
-                        <FormField label={appLang === 'vi' ? 'So luong' : 'Quantity'}>
+                        <FormField label={appLang === 'vi' ? 'Số lượng' : 'Quantity'}>
                             <input type="number" value={consumForm.quantity} onChange={e => setConsumForm({ ...consumForm, quantity: e.target.value })} style={inputStyle} />
                         </FormField>
-                        <FormField label={appLang === 'vi' ? 'Don vi' : 'Unit'}>
+                        <FormField label={appLang === 'vi' ? 'Đơn vị' : 'Unit'}>
                             <input value={consumForm.unit} onChange={e => setConsumForm({ ...consumForm, unit: e.target.value })} style={inputStyle} placeholder="kg, lit..." />
                         </FormField>
-                        <FormField label={appLang === 'vi' ? 'Don gia' : 'Unit Price'}>
+                        <FormField label={appLang === 'vi' ? 'Đơn giá' : 'Unit Price'}>
                             <input type="number" value={consumForm.unit_price} onChange={e => setConsumForm({ ...consumForm, unit_price: e.target.value })} style={inputStyle} />
                         </FormField>
                     </div>
-                    <FormField label={appLang === 'vi' ? 'Tong chi phi (VND)' : 'Total Cost (VND)'}>
+                    <FormField label={appLang === 'vi' ? 'Tổng chi phí (VND)' : 'Total Cost (VND)'}>
                         <input type="number" value={consumForm.total_cost} onChange={e => setConsumForm({ ...consumForm, total_cost: e.target.value })} style={inputStyle}
-                            placeholder={consumForm.quantity && consumForm.unit_price ? `Tu tinh: ${Number(consumForm.quantity) * Number(consumForm.unit_price)}` : ''} />
+                            placeholder={consumForm.quantity && consumForm.unit_price ? `Tự tính: ${Number(consumForm.quantity) * Number(consumForm.unit_price)}` : ''} />
                     </FormField>
-                    <FormField label={appLang === 'vi' ? 'Ghi chu' : 'Notes'}>
+                    <FormField label={appLang === 'vi' ? 'Ghi chú' : 'Notes'}>
                         <input value={consumForm.notes} onChange={e => setConsumForm({ ...consumForm, notes: e.target.value })} style={inputStyle} />
                     </FormField>
                 </ModalOverlay>
@@ -1175,27 +1185,27 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                     background: 'linear-gradient(135deg, #1e40af, #3b82f6)', borderRadius: '16px',
                     padding: '20px', color: 'white', textAlign: 'center', marginBottom: '16px'
                 }}>
-                    <div style={{ fontSize: '12px', opacity: 0.9 }}>{appLang === 'vi' ? 'Tong dau tu mo hinh' : 'Total Model Investment'}</div>
+                    <div style={{ fontSize: '12px', opacity: 0.9 }}>{appLang === 'vi' ? 'Tổng đầu tư mô hình' : 'Total Model Investment'}</div>
                     <div style={{ fontSize: '32px', fontWeight: 800 }}>{totalInvest.toLocaleString()}</div>
                     <div style={{ fontSize: '12px', opacity: 0.8 }}>VND</div>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
                     <div style={{ background: '#f0fdf4', borderRadius: '16px', padding: '16px', textAlign: 'center' }}>
-                        <div style={{ fontSize: '11px', color: '#166534' }}>{appLang === 'vi' ? 'Tu nhat ky' : 'From Diary'}</div>
+                        <div style={{ fontSize: '11px', color: '#166534' }}>{appLang === 'vi' ? 'Từ nhật ký' : 'From Diary'}</div>
                         <div style={{ fontSize: '22px', fontWeight: 800, color: '#166534' }}>{diaryCost.toLocaleString()}</div>
                     </div>
                     <div style={{ background: '#fef9c3', borderRadius: '16px', padding: '16px', textAlign: 'center' }}>
-                        <div style={{ fontSize: '11px', color: '#854d0e' }}>{appLang === 'vi' ? 'Tu tieu hao' : 'From Consumables'}</div>
+                        <div style={{ fontSize: '11px', color: '#854d0e' }}>{appLang === 'vi' ? 'Từ tiêu hao' : 'From Consumables'}</div>
                         <div style={{ fontSize: '22px', fontWeight: 800, color: '#854d0e' }}>{consumCost.toLocaleString()}</div>
                     </div>
                 </div>
 
                 {income && (
-                    <SectionCard title={appLang === 'vi' ? 'So sanh thu nhap nong ho' : 'Farmer Income Comparison'} icon="fa-balance-scale">
-                        <InfoRow label="Thu nhap rong ho" value={income.total_income ? `${income.total_income} tr.d` : null} icon="fa-wallet" />
-                        <InfoRow label="Dau tu mo hinh" value={`${(totalInvest / 1000000).toFixed(1)} tr.d`} icon="fa-piggy-bank" />
-                        <InfoRow label="Doanh thu ca phe" value={income.coffee_revenue ? `${income.coffee_revenue} tr.d` : null} icon="fa-mug-hot" />
+                    <SectionCard title={appLang === 'vi' ? 'So sánh thu nhập nông hộ' : 'Farmer Income Comparison'} icon="fa-balance-scale">
+                        <InfoRow label={appLang === 'vi' ? 'Thu nhập ròng hộ' : 'Net household income'} value={income.total_income ? `${income.total_income} tr.đ` : null} icon="fa-wallet" />
+                        <InfoRow label={appLang === 'vi' ? 'Đầu tư mô hình' : 'Model investment'} value={`${(totalInvest / 1000000).toFixed(1)} tr.đ`} icon="fa-piggy-bank" />
+                        <InfoRow label={appLang === 'vi' ? 'Doanh thu cà phê' : 'Coffee revenue'} value={income.coffee_revenue ? `${income.coffee_revenue} tr.đ` : null} icon="fa-mug-hot" />
                     </SectionCard>
                 )}
             </>
@@ -1230,7 +1240,7 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                         background: '#fef3c7', color: '#92400e', whiteSpace: 'nowrap'
                     }}>
                         <i className="fas fa-eye" style={{ marginRight: '4px' }}></i>
-                        {appLang === 'vi' ? 'Chi xem' : 'View only'}
+                        {appLang === 'vi' ? 'Chỉ xem' : 'View only'}
                     </span>
                 )}
             </div>

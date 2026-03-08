@@ -163,6 +163,29 @@ export const themes = {
             '--gray-900': '#33691E',
         }
     },
+    nature_coffee: {
+        id: 'nature_coffee',
+        name: { vi: 'Thiên Nhiên Cà Phê', en: 'Nature & Coffee', ede: 'Kmŭh Kăphê' },
+        icon: 'fas fa-seedling',
+        preview: ['#2E7D32', '#6D4C41', '#43A047', '#8D6E63'],
+        vars: {
+            '--coffee-primary': '#43A047',
+            '--coffee-dark': '#2E4A30',
+            '--coffee-medium': '#5D8A5E',
+            '--coffee-light': '#C8E6C9',
+            '--cream': '#F1F8E9',
+            '--cream-light': '#F7FBF2',
+            '--green-accent': '#66BB6A',
+            '--gold-accent': '#A1887F',
+            '--gold-light': '#D7CCC8',
+            '--gray-50': '#F7FBF2',
+            '--gray-100': '#F1F8E9',
+            '--gray-200': '#C8E6C9',
+            '--gray-300': '#A5D6A7',
+            '--gray-700': '#3E6B42',
+            '--gray-900': '#1B3A1E',
+        }
+    },
     dark_roast: {
         id: 'dark_roast',
         name: { vi: 'Rang Đậm', en: 'Dark Roast', ede: 'Jŭ Jing' },
@@ -259,6 +282,16 @@ export const themeCardGradients = {
         { from: '#558B2F', to: '#689F38' },
         { from: '#33691E', to: '#7CB342' },
         { from: '#689F38', to: '#8BC34A' },
+    ],
+    nature_coffee: [
+        { from: '#2E7D32', to: '#66BB6A' },
+        { from: '#5D4037', to: '#8D6E63' },
+        { from: '#388E3C', to: '#81C784' },
+        { from: '#6D4C41', to: '#A1887F' },
+        { from: '#43A047', to: '#A5D6A7' },
+        { from: '#4E342E', to: '#795548' },
+        { from: '#33691E', to: '#689F38' },
+        { from: '#795548', to: '#BCAAA4' },
     ],
     dark_roast: [
         { from: '#2D2D44', to: '#4A4A6A' },
