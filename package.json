@@ -10,7 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/arimo": "^5.2.8",
+    "@fontsource/noto-sans": "^5.2.10",
+    "@fontsource/open-sans": "^5.2.7",
     "@fontsource/roboto": "^5.2.10",
+    "@fontsource/tinos": "^5.2.7",
     "jspdf": "^4.2.0",
     "jspdf-autotable": "^5.0.7",
     "pocketbase": "^0.26.8",

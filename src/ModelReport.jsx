@@ -1,8 +1,28 @@
 import React, { useState } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { FontRegular, FontBold } from './fonts/roboto-base64'; // Tinos (Times New Roman compatible)
 import pb from './pbClient';
+
+// Available fonts for PDF (loaded at runtime from public/fonts/)
+const FONT_OPTIONS = [
+    { id: 'tinos', label: 'Times New Roman', files: ['Tinos-Regular.ttf', 'Tinos-Bold.ttf'] },
+    { id: 'arimo', label: 'Arial', files: ['Arimo-Regular.ttf', 'Arimo-Bold.ttf'] },
+    { id: 'roboto', label: 'Roboto', files: ['Roboto-Regular.ttf', 'Roboto-Bold.ttf'] },
+    { id: 'opensans', label: 'Open Sans', files: ['OpenSans-Regular.ttf', 'OpenSans-Bold.ttf'] },
+    { id: 'notosans', label: 'Noto Sans', files: ['NotoSans-Regular.ttf', 'NotoSans-Bold.ttf'] },
+];
+
+// Load TTF file as base64 string for jsPDF
+const loadFontBase64 = async (filename) => {
+    const url = (import.meta.env.BASE_URL || '/') + 'fonts/' + filename;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Font not found: ${filename}`);
+    const buf = await res.arrayBuffer();
+    const bytes = new Uint8Array(buf);
+    let binary = '';
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+    return btoa(binary);
+};
 
 // Label maps with 3 languages: vi, en, ede
 const ACTIVITY_LABELS = {
@@ -49,7 +69,6 @@ const CATEGORY_LABELS = {
 const today = () => new Date().toISOString().split('T')[0];
 const firstOfYear = () => `${new Date().getFullYear()}-01-01`;
 
-// Month names for dd-mmm-yyyy format
 const MONTH_NAMES = {
     vi: ['Th01', 'Th02', 'Th03', 'Th04', 'Th05', 'Th06', 'Th07', 'Th08', 'Th09', 'Th10', 'Th11', 'Th12'],
     en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -75,7 +94,6 @@ const filterByDate = (records, dateField, from, to) => {
 
 const labelFor = (map, key, lang) => map[key]?.[lang] || map[key]?.vi || key || '';
 
-// Load image as base64 for jsPDF
 const loadImage = (url) => new Promise((resolve) => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
@@ -90,203 +108,72 @@ const loadImage = (url) => new Promise((resolve) => {
     img.src = url;
 });
 
-// PDF text labels in 3 languages (now with proper diacritics thanks to Roboto font)
 const PDF_LABELS = {
     vi: {
         reportTitle: 'BÁO CÁO MÔ HÌNH',
         reportSubtitle: 'TRÌNH DIỄN CÀ PHÊ THÍCH ỨNG BIẾN ĐỔI KHÍ HẬU',
         sponsor: 'Tài trợ bởi Tchibo | Thực hiện bởi NKG Việt Nam',
-        modelCode: 'Mã mô hình',
-        name: 'Tên',
-        farmer: 'Nông hộ',
-        location: 'Vị trí',
-        area: 'Diện tích',
-        period: 'Thời gian',
-        diaryTitle: 'NHẬT KÝ CANH TÁC',
-        inspectTitle: 'KIỂM TRA ĐỊNH KỲ',
-        consumTitle: 'CHI PHÍ TIÊU HAO',
-        costSummary: 'TỔNG HỢP CHI PHÍ',
-        date: 'Ngày',
-        activity: 'Hoạt động',
-        description: 'Mô tả',
-        material: 'Vật tư',
-        qty: 'SL',
-        laborCost: 'CP nhân công',
-        matCost: 'CP vật tư',
-        gcp: 'GCP',
-        type: 'Loại',
-        growth: 'Sinh trưởng',
-        pests: 'Sâu bệnh',
-        soil: 'Đất',
-        water: 'Nước',
-        healthPct: 'SK cây %',
-        recomm: 'Khuyến nghị',
-        category: 'Danh mục',
-        item: 'Tên hạng mục',
-        unit: 'ĐV',
-        price: 'Đơn giá',
-        total: 'Thành tiền',
-        notes: 'Ghi chú',
-        totalLabor: 'Tổng CP nhân công',
-        totalMat: 'Tổng CP vật tư',
-        totalAll: 'Tổng cộng',
-        catCol: 'Hạng mục',
-        amountCol: 'Thành tiền (VND)',
-        laborDiary: 'Nhân công (nhật ký)',
-        matDiary: 'Vật tư (nhật ký)',
-        grandTotal: 'TỔNG CỘNG',
-        sigOwner: 'Chủ mô hình',
-        sigInspector: 'Cán bộ kiểm tra',
-        sigApproval: 'Xác nhận dự án',
-        sigNote: 'Ký, ghi rõ họ tên',
+        modelCode: 'Mã mô hình', name: 'Tên', farmer: 'Nông hộ', location: 'Vị trí', area: 'Diện tích', period: 'Thời gian',
+        diaryTitle: 'NHẬT KÝ CANH TÁC', inspectTitle: 'KIỂM TRA ĐỊNH KỲ', consumTitle: 'CHI PHÍ TIÊU HAO', costSummary: 'TỔNG HỢP CHI PHÍ',
+        date: 'Ngày', activity: 'Hoạt động', description: 'Mô tả', material: 'Vật tư', qty: 'SL',
+        laborCost: 'CP nhân công', matCost: 'CP vật tư', gcp: 'GCP',
+        type: 'Loại', growth: 'Sinh trưởng', pests: 'Sâu bệnh', soil: 'Đất', water: 'Nước', healthPct: 'SK cây %', recomm: 'Khuyến nghị',
+        category: 'Danh mục', item: 'Tên hạng mục', unit: 'ĐV', price: 'Đơn giá', total: 'Thành tiền', notes: 'Ghi chú',
+        totalLabor: 'Tổng CP nhân công', totalMat: 'Tổng CP vật tư', totalAll: 'Tổng cộng',
+        catCol: 'Hạng mục', amountCol: 'Thành tiền (VND)', laborDiary: 'Nhân công (nhật ký)', matDiary: 'Vật tư (nhật ký)', grandTotal: 'TỔNG CỘNG',
+        sigOwner: 'Chủ mô hình', sigInspector: 'Cán bộ kiểm tra', sigApproval: 'Xác nhận dự án', sigNote: 'Ký, ghi rõ họ tên',
         footer: 'Báo cáo được tạo tự động bởi phần mềm Tân Cao Nguyên',
-        noData: 'Không có dữ liệu trong khoảng thời gian này',
-        ha: 'ha',
+        noData: 'Không có dữ liệu trong khoảng thời gian này', ha: 'ha',
     },
     en: {
         reportTitle: 'MODEL REPORT',
         reportSubtitle: 'CLIMATE-ADAPTED COFFEE DEMONSTRATION',
         sponsor: 'Sponsored by Tchibo | Implemented by NKG Viet Nam',
-        modelCode: 'Model code',
-        name: 'Name',
-        farmer: 'Farmer',
-        location: 'Location',
-        area: 'Area',
-        period: 'Period',
-        diaryTitle: 'FARM DIARY',
-        inspectTitle: 'INSPECTIONS',
-        consumTitle: 'CONSUMABLES / COSTS',
-        costSummary: 'COST SUMMARY',
-        date: 'Date',
-        activity: 'Activity',
-        description: 'Description',
-        material: 'Material',
-        qty: 'Qty',
-        laborCost: 'Labor Cost',
-        matCost: 'Mat. Cost',
-        gcp: 'GCP',
-        type: 'Type',
-        growth: 'Growth',
-        pests: 'Pests',
-        soil: 'Soil',
-        water: 'Water',
-        healthPct: 'Health %',
-        recomm: 'Recomm.',
-        category: 'Category',
-        item: 'Item',
-        unit: 'Unit',
-        price: 'Price',
-        total: 'Total',
-        notes: 'Notes',
-        totalLabor: 'Total Labor',
-        totalMat: 'Total Material',
-        totalAll: 'Total',
-        catCol: 'Category',
-        amountCol: 'Amount (VND)',
-        laborDiary: 'Labor (diary)',
-        matDiary: 'Material (diary)',
-        grandTotal: 'GRAND TOTAL',
-        sigOwner: 'Model Owner',
-        sigInspector: 'Inspector',
-        sigApproval: 'Project Approval',
-        sigNote: 'Sign & print name',
+        modelCode: 'Model code', name: 'Name', farmer: 'Farmer', location: 'Location', area: 'Area', period: 'Period',
+        diaryTitle: 'FARM DIARY', inspectTitle: 'INSPECTIONS', consumTitle: 'CONSUMABLES / COSTS', costSummary: 'COST SUMMARY',
+        date: 'Date', activity: 'Activity', description: 'Description', material: 'Material', qty: 'Qty',
+        laborCost: 'Labor Cost', matCost: 'Mat. Cost', gcp: 'GCP',
+        type: 'Type', growth: 'Growth', pests: 'Pests', soil: 'Soil', water: 'Water', healthPct: 'Health %', recomm: 'Recomm.',
+        category: 'Category', item: 'Item', unit: 'Unit', price: 'Price', total: 'Total', notes: 'Notes',
+        totalLabor: 'Total Labor', totalMat: 'Total Material', totalAll: 'Total',
+        catCol: 'Category', amountCol: 'Amount (VND)', laborDiary: 'Labor (diary)', matDiary: 'Material (diary)', grandTotal: 'GRAND TOTAL',
+        sigOwner: 'Model Owner', sigInspector: 'Inspector', sigApproval: 'Project Approval', sigNote: 'Sign & print name',
         footer: 'Report auto-generated by Tan Cao Nguyen software',
-        noData: 'No data in this date range',
-        ha: 'ha',
+        noData: 'No data in this date range', ha: 'ha',
     },
     ede: {
         reportTitle: 'HDRŬO KLEI HRA',
         reportSubtitle: 'HDRUÔM KAPHÊ MLĂN YANG',
         sponsor: 'Bi Tchibo dua | NKG Việt Nam ngă',
-        modelCode: 'Kud hdrŭo',
-        name: 'Anăn',
-        farmer: 'Mnuih hma',
-        location: 'Anôk',
-        area: 'Prŏng',
-        period: 'Mông',
-        diaryTitle: 'HDRO HMA',
-        inspectTitle: 'DLĂNG HRUÊ',
-        consumTitle: 'PRĂK MNGA',
-        costSummary: 'PRĂK ABŎH',
-        date: 'Hruê',
-        activity: 'Bruă',
-        description: 'Klei',
-        material: 'Mnă',
-        qty: 'SL',
-        laborCost: 'CP mnuih',
-        matCost: 'CP mnă',
-        gcp: 'GCP',
-        type: 'Mtă',
-        growth: 'Đuôn',
-        pests: 'Hngah',
-        soil: 'Lăn',
-        water: 'Êa',
-        healthPct: 'SK %',
-        recomm: 'Kčah',
-        category: 'Mtă',
-        item: 'Anăn',
-        unit: 'ĐV',
-        price: 'Mlăn',
-        total: 'Prăk',
-        notes: 'Klei',
-        totalLabor: 'Prăk mnuih',
-        totalMat: 'Prăk mnă',
-        totalAll: 'Abŏh',
-        catCol: 'Mtă',
-        amountCol: 'Prăk (VND)',
-        laborDiary: 'Mnuih (hdro)',
-        matDiary: 'Mnă (hdro)',
-        grandTotal: 'ABŎH PRĂK',
-        sigOwner: 'Khua hdrŭo',
-        sigInspector: 'Pô dlăng',
-        sigApproval: 'Pô bi sĭt',
-        sigNote: 'Čih anăn',
+        modelCode: 'Kud hdrŭo', name: 'Anăn', farmer: 'Mnuih hma', location: 'Anôk', area: 'Prŏng', period: 'Mông',
+        diaryTitle: 'HDRO HMA', inspectTitle: 'DLĂNG HRUÊ', consumTitle: 'PRĂK MNGA', costSummary: 'PRĂK ABŎH',
+        date: 'Hruê', activity: 'Bruă', description: 'Klei', material: 'Mnă', qty: 'SL',
+        laborCost: 'CP mnuih', matCost: 'CP mnă', gcp: 'GCP',
+        type: 'Mtă', growth: 'Đuôn', pests: 'Hngah', soil: 'Lăn', water: 'Êa', healthPct: 'SK %', recomm: 'Kčah',
+        category: 'Mtă', item: 'Anăn', unit: 'ĐV', price: 'Mlăn', total: 'Prăk', notes: 'Klei',
+        totalLabor: 'Prăk mnuih', totalMat: 'Prăk mnă', totalAll: 'Abŏh',
+        catCol: 'Mtă', amountCol: 'Prăk (VND)', laborDiary: 'Mnuih (hdro)', matDiary: 'Mnă (hdro)', grandTotal: 'ABŎH PRĂK',
+        sigOwner: 'Khua hdrŭo', sigInspector: 'Pô dlăng', sigApproval: 'Pô bi sĭt', sigNote: 'Čih anăn',
         footer: 'Hdrŭo mơ̆ng Tân Cao Nguyên',
-        noData: 'Ka mâo klei hra',
-        ha: 'ha',
+        noData: 'Ka mâo klei hra', ha: 'ha',
     },
 };
 
-// UI dialog labels (with diacritics for screen display)
 const DIALOG_LABELS = {
     vi: {
-        title: 'Xuất báo cáo PDF',
-        dateRange: 'Khoảng thời gian',
-        from: 'Từ ngày',
-        to: 'Đến ngày',
-        sections: 'Nội dung báo cáo',
-        diary: 'Nhật ký canh tác',
-        inspect: 'Kiểm tra định kỳ',
-        consum: 'Chi phí tiêu hao',
-        generate: 'Xuất PDF',
-        cancel: 'Hủy',
-        generating: 'Đang tạo...',
+        title: 'Xuất báo cáo PDF', dateRange: 'Khoảng thời gian', from: 'Từ ngày', to: 'Đến ngày',
+        sections: 'Nội dung báo cáo', diary: 'Nhật ký canh tác', inspect: 'Kiểm tra định kỳ', consum: 'Chi phí tiêu hao',
+        generate: 'Xuất PDF', cancel: 'Hủy', generating: 'Đang tạo...', font: 'Phông chữ',
     },
     en: {
-        title: 'Export PDF Report',
-        dateRange: 'Date Range',
-        from: 'From',
-        to: 'To',
-        sections: 'Report Sections',
-        diary: 'Farm Diary',
-        inspect: 'Inspections',
-        consum: 'Consumables/Costs',
-        generate: 'Export PDF',
-        cancel: 'Cancel',
-        generating: 'Generating...',
+        title: 'Export PDF Report', dateRange: 'Date Range', from: 'From', to: 'To',
+        sections: 'Report Sections', diary: 'Farm Diary', inspect: 'Inspections', consum: 'Consumables/Costs',
+        generate: 'Export PDF', cancel: 'Cancel', generating: 'Generating...', font: 'Font',
     },
     ede: {
-        title: 'Mă hdrŭo PDF',
-        dateRange: 'Mông',
-        from: 'Mơ̆ng',
-        to: 'Truh',
-        sections: 'Klei hra',
-        diary: 'Hdro hma',
-        inspect: 'Dlăng hruê',
-        consum: 'Prăk mnga',
-        generate: 'Mă PDF',
-        cancel: 'Hĭn',
-        generating: 'Dôk ngă...',
+        title: 'Mă hdrŭo PDF', dateRange: 'Mông', from: 'Mơ̆ng', to: 'Truh',
+        sections: 'Klei hra', diary: 'Hdro hma', inspect: 'Dlăng hruê', consum: 'Prăk mnga',
+        generate: 'Mă PDF', cancel: 'Hĭn', generating: 'Dôk ngă...', font: 'Rup boh hră',
     },
 };
 
@@ -299,6 +186,7 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
     const [includeInspect, setIncludeInspect] = useState(true);
     const [includeConsum, setIncludeConsum] = useState(true);
     const [generating, setGenerating] = useState(false);
+    const [selectedFont, setSelectedFont] = useState(localStorage.getItem('pdf_font') || 'tinos');
 
     if (!show) return null;
 
@@ -316,12 +204,21 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             const contentW = pageW - margin * 2;
             let y = margin;
 
-            // Register Tinos font (Times New Roman compatible, Vietnamese support)
-            doc.addFileToVFS('Tinos-Regular.ttf', FontRegular);
-            doc.addFont('Tinos-Regular.ttf', 'Times', 'normal');
-            doc.addFileToVFS('Tinos-Bold.ttf', FontBold);
-            doc.addFont('Tinos-Bold.ttf', 'Times', 'bold');
-            doc.setFont('Times');
+            // Load and register selected font
+            const fontOpt = FONT_OPTIONS.find(f => f.id === selectedFont) || FONT_OPTIONS[0];
+            const fontName = 'CustomFont';
+            const [regB64, boldB64] = await Promise.all([
+                loadFontBase64(fontOpt.files[0]),
+                loadFontBase64(fontOpt.files[1]),
+            ]);
+            doc.addFileToVFS('custom-regular.ttf', regB64);
+            doc.addFont('custom-regular.ttf', fontName, 'normal');
+            doc.addFileToVFS('custom-bold.ttf', boldB64);
+            doc.addFont('custom-bold.ttf', fontName, 'bold');
+            doc.setFont(fontName);
+
+            // Save font preference
+            localStorage.setItem('pdf_font', selectedFont);
 
             // --- HEADER: Logo centered at top, 1/4 page width ---
             let logoResult = null;
@@ -330,17 +227,17 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             } catch { /* no logo */ }
 
             if (logoResult) {
-                const logoW = pageW / 4; // 1/4 page width
+                const logoW = pageW / 4;
                 const aspectRatio = logoResult.height / logoResult.width;
                 const logoH = logoW * aspectRatio;
-                const logoX = (pageW - logoW) / 2; // centered
+                const logoX = (pageW - logoW) / 2;
                 doc.addImage(logoResult.data, 'PNG', logoX, y, logoW, logoH);
                 y += logoH + 4;
             }
 
-            // Title - centered below logo
+            // Title
             doc.setFontSize(14);
-            doc.setFont('Times', 'bold');
+            doc.setFont(fontName, 'bold');
             doc.text(P.reportTitle, pageW / 2, y, { align: 'center' });
             y += 6;
             doc.setFontSize(12);
@@ -349,13 +246,13 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
 
             // Sponsor line
             doc.setFontSize(11);
-            doc.setFont('Times', 'normal');
+            doc.setFont(fontName, 'normal');
             doc.text(P.sponsor, pageW / 2, y, { align: 'center' });
             y += 8;
 
-            // Model info - left aligned
+            // Model info
             doc.setFontSize(11);
-            doc.setFont('Times', 'normal');
+            doc.setFont(fontName, 'normal');
             const infoPairs = [
                 [P.modelCode, model.model_code || ''],
                 [P.name, model.name || model.model_name || ''],
@@ -368,10 +265,10 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             infoPairs.push([P.period, `${fmtDate(dateFrom, lang)} - ${fmtDate(dateTo, lang)}`]);
 
             infoPairs.forEach(([label, val]) => {
-                doc.setFont('Times', 'bold');
+                doc.setFont(fontName, 'bold');
                 doc.text(`${label}: `, margin, y);
                 const labelW = doc.getTextWidth(`${label}: `);
-                doc.setFont('Times', 'normal');
+                doc.setFont(fontName, 'normal');
                 doc.text(val, margin + labelW, y);
                 y += 5;
             });
@@ -402,20 +299,20 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                 sectionNum++;
                 ensureSpace(20);
                 doc.setFontSize(12);
-                doc.setFont('Times', 'bold');
+                doc.setFont(fontName, 'bold');
                 doc.text(`${sectionNum}. ${P.diaryTitle} (${diaryData.length})`, margin, y);
                 y += 3;
 
                 if (diaryData.length === 0) {
                     doc.setFontSize(11);
-                    doc.setFont('Times', 'normal');
+                    doc.setFont(fontName, 'normal');
                     doc.text(P.noData, margin + 5, y + 5);
                     y += 10;
                 } else {
                     autoTable(doc, {
                         startY: y,
                         margin: { left: margin, right: margin },
-                        styles: { fontSize: 9, cellPadding: 2, font: 'Times' },
+                        styles: { fontSize: 9, cellPadding: 2, font: fontName },
                         headStyles: { fillColor: [93, 64, 55], textColor: 255, fontStyle: 'bold' },
                         head: [[P.date, P.activity, P.description, P.material, P.qty, P.laborCost, P.matCost, P.gcp]],
                         body: diaryData.map(d => [
@@ -429,13 +326,9 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                             d.gcp_compliant ? 'V' : '',
                         ]),
                         columnStyles: {
-                            0: { cellWidth: 22 },
-                            1: { cellWidth: 20 },
-                            2: { cellWidth: 'auto' },
-                            3: { cellWidth: 18 },
-                            4: { cellWidth: 16 },
-                            5: { cellWidth: 20, halign: 'right' },
-                            6: { cellWidth: 20, halign: 'right' },
+                            0: { cellWidth: 22 }, 1: { cellWidth: 20 }, 2: { cellWidth: 'auto' },
+                            3: { cellWidth: 18 }, 4: { cellWidth: 16 },
+                            5: { cellWidth: 20, halign: 'right' }, 6: { cellWidth: 20, halign: 'right' },
                             7: { cellWidth: 10, halign: 'center' },
                         },
                     });
@@ -444,7 +337,7 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                     const diaryLaborTotal = diaryData.reduce((s, d) => s + (d.labor_cost || 0), 0);
                     const diaryMatTotal = diaryData.reduce((s, d) => s + (d.material_cost || 0), 0);
                     doc.setFontSize(10);
-                    doc.setFont('Times', 'bold');
+                    doc.setFont(fontName, 'bold');
                     doc.text(`${P.totalLabor}: ${fmtNum(diaryLaborTotal)} | ${P.totalMat}: ${fmtNum(diaryMatTotal)} | ${P.totalAll}: ${fmtNum(diaryLaborTotal + diaryMatTotal)} VND`, margin + 5, y);
                     y += 8;
                 }
@@ -455,20 +348,20 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                 sectionNum++;
                 ensureSpace(20);
                 doc.setFontSize(12);
-                doc.setFont('Times', 'bold');
+                doc.setFont(fontName, 'bold');
                 doc.text(`${sectionNum}. ${P.inspectTitle} (${inspectData.length})`, margin, y);
                 y += 3;
 
                 if (inspectData.length === 0) {
                     doc.setFontSize(11);
-                    doc.setFont('Times', 'normal');
+                    doc.setFont(fontName, 'normal');
                     doc.text(P.noData, margin + 5, y + 5);
                     y += 10;
                 } else {
                     autoTable(doc, {
                         startY: y,
                         margin: { left: margin, right: margin },
-                        styles: { fontSize: 9, cellPadding: 2, font: 'Times' },
+                        styles: { fontSize: 9, cellPadding: 2, font: fontName },
                         headStyles: { fillColor: [30, 64, 175], textColor: 255, fontStyle: 'bold' },
                         head: [[P.date, P.type, P.growth, P.pests, P.soil, P.water, P.healthPct, P.recomm]],
                         body: inspectData.map(i => [
@@ -482,9 +375,7 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                             (i.recommendations || '').substring(0, 60),
                         ]),
                         columnStyles: {
-                            0: { cellWidth: 22 },
-                            1: { cellWidth: 18 },
-                            7: { cellWidth: 'auto' },
+                            0: { cellWidth: 22 }, 1: { cellWidth: 18 }, 7: { cellWidth: 'auto' },
                         },
                     });
                     y = doc.lastAutoTable.finalY + 8;
@@ -496,20 +387,20 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                 sectionNum++;
                 ensureSpace(20);
                 doc.setFontSize(12);
-                doc.setFont('Times', 'bold');
+                doc.setFont(fontName, 'bold');
                 doc.text(`${sectionNum}. ${P.consumTitle} (${consumData.length})`, margin, y);
                 y += 3;
 
                 if (consumData.length === 0) {
                     doc.setFontSize(11);
-                    doc.setFont('Times', 'normal');
+                    doc.setFont(fontName, 'normal');
                     doc.text(P.noData, margin + 5, y + 5);
                     y += 10;
                 } else {
                     autoTable(doc, {
                         startY: y,
                         margin: { left: margin, right: margin },
-                        styles: { fontSize: 9, cellPadding: 2, font: 'Times' },
+                        styles: { fontSize: 9, cellPadding: 2, font: fontName },
                         headStyles: { fillColor: [133, 77, 14], textColor: 255, fontStyle: 'bold' },
                         head: [[P.date, P.category, P.item, P.qty, P.unit, P.price, P.total, P.notes]],
                         body: consumData.map(c => [
@@ -523,10 +414,8 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                             (c.notes || '').substring(0, 40),
                         ]),
                         columnStyles: {
-                            0: { cellWidth: 22 },
-                            1: { cellWidth: 22 },
-                            5: { cellWidth: 18, halign: 'right' },
-                            6: { cellWidth: 20, halign: 'right' },
+                            0: { cellWidth: 22 }, 1: { cellWidth: 22 },
+                            5: { cellWidth: 18, halign: 'right' }, 6: { cellWidth: 20, halign: 'right' },
                         },
                     });
                     y = doc.lastAutoTable.finalY + 4;
@@ -545,7 +434,7 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
 
                     ensureSpace(40);
                     doc.setFontSize(11);
-                    doc.setFont('Times', 'bold');
+                    doc.setFont(fontName, 'bold');
                     doc.text(P.costSummary, margin, y + 6);
                     y += 9;
 
@@ -561,13 +450,11 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                     autoTable(doc, {
                         startY: y,
                         margin: { left: margin + 20, right: margin + 20 },
-                        styles: { fontSize: 10, cellPadding: 3, font: 'Times' },
+                        styles: { fontSize: 10, cellPadding: 3, font: fontName },
                         headStyles: { fillColor: [46, 125, 50], textColor: 255 },
                         head: [[P.catCol, P.amountCol]],
                         body: summaryRows,
-                        columnStyles: {
-                            1: { halign: 'right', cellWidth: 40 },
-                        },
+                        columnStyles: { 1: { halign: 'right', cellWidth: 40 } },
                     });
                     y = doc.lastAutoTable.finalY + 8;
                 }
@@ -575,10 +462,7 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
 
             // --- SIGNATURE BLOCK ---
             const sigHeight = 45;
-            if (y + sigHeight > pageH - 15) {
-                doc.addPage();
-                y = margin;
-            }
+            if (y + sigHeight > pageH - 15) { doc.addPage(); y = margin; }
             y = Math.max(y + 10, pageH - sigHeight - 15);
 
             doc.setDrawColor(180, 180, 180);
@@ -598,18 +482,18 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                 const centerX = x + colW / 2;
 
                 doc.setFontSize(11);
-                doc.setFont('Times', 'bold');
+                doc.setFont(fontName, 'bold');
                 doc.text(col.title, centerX, y, { align: 'center' });
 
                 doc.setFontSize(10);
-                doc.setFont('Times', 'normal');
+                doc.setFont(fontName, 'normal');
                 doc.text(`(${P.sigNote})`, centerX, y + 5, { align: 'center' });
 
                 doc.setLineWidth(0.2);
                 doc.line(x + 10, y + 22, x + colW - 10, y + 22);
 
                 if (col.name) {
-                    doc.setFont('Times', 'normal');
+                    doc.setFont(fontName, 'normal');
                     doc.setFontSize(10);
                     doc.text(col.name, centerX, y + 27, { align: 'center' });
                 }
@@ -617,12 +501,12 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
 
             // Footer
             doc.setFontSize(9);
-            doc.setFont('Times', 'normal');
+            doc.setFont(fontName, 'normal');
             doc.setTextColor(150, 150, 150);
             doc.text(P.footer, pageW / 2, pageH - 8, { align: 'center' });
             doc.setTextColor(0, 0, 0);
 
-            // --- SAVE with language suffix ---
+            // --- SAVE ---
             const fromStr = dateFrom.replace(/-/g, '');
             const toStr = dateTo.replace(/-/g, '');
             const suffix = LANG_SUFFIX[lang] || '_VN';
@@ -650,7 +534,7 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
             <div style={{
                 background: 'var(--white, #fff)', borderRadius: '20px', width: '90%', maxWidth: '480px',
                 padding: '28px', boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
-                animation: 'fadeInUp 0.3s ease',
+                animation: 'fadeInUp 0.3s ease', maxHeight: '90vh', overflowY: 'auto',
             }} onClick={e => e.stopPropagation()}>
                 {/* Title */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -672,20 +556,33 @@ const ModelReport = ({ show, onClose, model, farmer, diary = [], inspections = [
                     <div style={{ fontSize: '11px', opacity: 0.9, marginTop: '2px' }}>{farmer?.full_name || '---'}</div>
                 </div>
 
-                {/* Date range */}
+                {/* Date range + Font selector row */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
+                    <div>
+                        <span style={{ fontSize: '10px', color: 'var(--gray-700)', fontWeight: 600 }}>{DL.from}</span>
+                        <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={inputStyle} />
+                    </div>
+                    <div>
+                        <span style={{ fontSize: '10px', color: 'var(--gray-700)', fontWeight: 600 }}>{DL.to}</span>
+                        <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={inputStyle} />
+                    </div>
+                </div>
+
+                {/* Font selector */}
                 <div style={{ marginBottom: '16px' }}>
                     <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--gray-700)', marginBottom: '6px' }}>
-                        <i className="fas fa-calendar-alt" style={{ marginRight: '6px' }}></i>{DL.dateRange}
+                        <i className="fas fa-font" style={{ marginRight: '6px' }}></i>{DL.font}
                     </label>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                        <div>
-                            <span style={{ fontSize: '10px', color: 'var(--gray-700)' }}>{DL.from}</span>
-                            <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={inputStyle} />
-                        </div>
-                        <div>
-                            <span style={{ fontSize: '10px', color: 'var(--gray-700)' }}>{DL.to}</span>
-                            <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={inputStyle} />
-                        </div>
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        {FONT_OPTIONS.map(f => (
+                            <button key={f.id} onClick={() => setSelectedFont(f.id)} style={{
+                                padding: '6px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: 600, cursor: 'pointer',
+                                border: selectedFont === f.id ? '2px solid var(--coffee-primary)' : '1.5px solid var(--gray-200, #e2e8f0)',
+                                background: selectedFont === f.id ? 'var(--cream, #f5f5f5)' : 'white',
+                                color: selectedFont === f.id ? 'var(--coffee-dark)' : '#64748b',
+                                transition: 'all 0.2s',
+                            }}>{f.label}</button>
+                        ))}
                     </div>
                 </div>
 
