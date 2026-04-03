@@ -262,7 +262,7 @@ const FarmerManagement = ({ onBack, appLang = 'vi', currentUser }) => {
                 <table className="pro-table">
                     <thead>
                         <tr>
-                            <th>{t.farmer_code}</th>
+                            {/* <th>{t.farmer_code}</th> */}
                             <th>{t.farmer_name}</th>
                             <th>{t.farmer_village}</th>
                             <th>{t.farmer_phone}</th>
@@ -279,7 +279,7 @@ const FarmerManagement = ({ onBack, appLang = 'vi', currentUser }) => {
                         ) : (
                             farmers.map(f => (
                                 <tr key={f.id} onClick={() => handleView(f)} style={{ cursor: 'pointer', transition: 'background 0.2s' }} className="hover-row">
-                                    <td><span style={{ fontFamily: 'monospace', fontWeight: 700, color: 'var(--coffee-primary)' }}>{f.farmer_code}</span></td>
+                                    {/* <td><span style={{ fontFamily: 'monospace', fontWeight: 700, color: 'var(--coffee-primary)' }}>{f.farmer_code}</span></td> */}
                                     <td>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                             {getFileUrl(f, f.photo) ? (

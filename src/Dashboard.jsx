@@ -660,12 +660,6 @@ const Dashboard = ({ onLogout }) => {
                 <button className={`nav-item-mobile ${view === 'home' || view === 'model_detail' ? 'active' : ''}`} onClick={() => { setView('home'); setSelectedModel(null); }}>
                     <i className="fas fa-home"></i> <span>{t.home}</span>
                 </button>
-                <button className={`nav-item-mobile ${view === 'training' ? 'active' : ''}`} onClick={() => setView('training')}>
-                    <i className="fas fa-graduation-cap"></i> <span>{t.training}</span>
-                </button>
-                <button className={`nav-item-mobile ${view === 'settings' ? 'active' : ''}`} onClick={() => setView('settings')}>
-                    <i className="fas fa-cog"></i> <span>{t.settings || 'Cài đặt'}</span>
-                </button>
             </nav>
         </div>
     );
