@@ -854,18 +854,31 @@ const ModelEconomics = ({ model, appLang = 'vi', canEdit = true }) => {
     return (
         <div>
             {/* Sub-tab bar */}
-            <div style={{ display: 'flex', gap: '4px', overflowX: 'auto', marginBottom: '16px', padding: '4px', background: '#f1f5f9', borderRadius: '12px', WebkitOverflowScrolling: 'touch' }}>
-                {SUBTABS.map(tab => (
-                    <button
-                        key={tab.id}
-                        onClick={() => setSubTab(tab.id)}
-                        className={`mdv-tab-btn ${subTab === tab.id ? 'active' : ''}`}
-                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', fontSize: '10px', padding: '6px 2px', minWidth: '70px', lineHeight: 1.2 }}
-                    >
-                        <i className={`fas ${tab.icon} mdv-tab-icon`} style={{ fontSize: '16px', margin: 0 }}></i>
-                        <span>{tab[appLang] || tab.vi}</span>
-                    </button>
-                ))}
+            <div style={{ position: 'relative', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', gap: '4px', overflowX: 'auto', padding: '4px', background: '#f1f5f9', borderRadius: '12px', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }}>
+                    {SUBTABS.map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setSubTab(tab.id)}
+                            className={`mdv-tab-btn ${subTab === tab.id ? 'active' : ''}`}
+                            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', fontSize: '10px', padding: '6px 2px', minWidth: '70px', lineHeight: 1.2, flexShrink: 0 }}
+                        >
+                            <i className={`fas ${tab.icon} mdv-tab-icon`} style={{ fontSize: '16px', margin: 0 }}></i>
+                            <span>{tab[appLang] || tab.vi}</span>
+                        </button>
+                    ))}
+                    {/* Add an empty div for extra padding at the end of the scroll */}
+                    <div style={{ minWidth: '20px', flexShrink: 0 }}></div>
+                </div>
+                {/* Visual indicator for swiping right */}
+                <div style={{ 
+                    position: 'absolute', top: 0, right: 0, bottom: 0, width: '40px', 
+                    background: 'linear-gradient(to right, rgba(241, 245, 249, 0), rgba(241, 245, 249, 1))', 
+                    borderRadius: '0 12px 12px 0',
+                    pointerEvents: 'none', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '4px'
+                }}>
+                    <i className="fas fa-chevron-right" style={{ fontSize: '10px', color: 'var(--coffee-primary)', opacity: 0.6, animation: 'pulse 2s infinite' }}></i>
+                </div>
             </div>
 
             {/* Sub-tab content */}
