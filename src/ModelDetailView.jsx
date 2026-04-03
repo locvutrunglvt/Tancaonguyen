@@ -914,18 +914,30 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
 
         return (
         <>
-            <div style={{ display: 'flex', overflowX: 'auto', gap: '8px', paddingBottom: '12px', marginBottom: '16px', borderBottom: '1px solid #e2e8f0', WebkitOverflowScrolling: 'touch' }}>
-                {FARM_TABS.map(tab => (
-                    <button
-                        key={tab.id}
-                        onClick={() => setFarmSubTab(tab.id)}
-                        className={`mdv-tab-btn ${farmSubTab === tab.id ? 'active' : ''}`}
-                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', fontSize: '10px', padding: '6px 2px', minWidth: '70px', lineHeight: 1.2, flexShrink: 0 }}
-                    >
-                        <i className={`fas ${tab.icon} mdv-tab-icon`} style={{ fontSize: '16px', margin: 0 }}></i>
-                        <span>{tab[appLang] || tab.vi}</span>
-                    </button>
-                ))}
+            <div style={{ position: 'relative', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', overflowX: 'auto', gap: '8px', paddingBottom: '12px', borderBottom: '1px solid #e2e8f0', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }}>
+                    {FARM_TABS.map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setFarmSubTab(tab.id)}
+                            className={`mdv-tab-btn ${farmSubTab === tab.id ? 'active' : ''}`}
+                            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', fontSize: '10px', padding: '6px 2px', minWidth: '70px', lineHeight: 1.2, flexShrink: 0 }}
+                        >
+                            <i className={`fas ${tab.icon} mdv-tab-icon`} style={{ fontSize: '16px', margin: 0 }}></i>
+                            <span>{tab[appLang] || tab.vi}</span>
+                        </button>
+                    ))}
+                    {/* Add an empty div for extra padding at the end of the scroll */}
+                    <div style={{ minWidth: '20px', flexShrink: 0 }}></div>
+                </div>
+                {/* Visual indicator for swiping right */}
+                <div style={{ 
+                    position: 'absolute', top: 0, right: 0, bottom: '13px', width: '40px', 
+                    background: 'linear-gradient(to right, rgba(250, 246, 243, 0), rgba(250, 246, 243, 1))', 
+                    pointerEvents: 'none', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '4px'
+                }}>
+                    <i className="fas fa-chevron-right" style={{ fontSize: '10px', color: 'var(--coffee-primary)', opacity: 0.6, animation: 'pulse 2s infinite' }}></i>
+                </div>
             </div>
 
             {/* ── LAYER 2: Land & Legal ── */}
