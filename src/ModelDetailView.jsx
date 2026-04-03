@@ -729,17 +729,17 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                 </div>
             </SectionCard>
 
-            <div className="mdv-overview-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+            <div className="mdv-overview-stats" style={{ display: 'flex', justifyContent: 'space-between', gap: '4px' }}>
                 {[
                     { label: appLang === 'vi' ? 'Nhật ký' : 'Diary', count: diary.length, color: '#166534', bg: '#dcfce7', icon: 'fa-book' },
                     { label: appLang === 'vi' ? 'Kiểm tra' : 'Verify', count: inspections.length, color: '#1e40af', bg: '#dbeafe', icon: 'fa-clipboard-check' },
                     { label: appLang === 'vi' ? 'Tiêu hao' : 'Costs', count: consumables.length, color: '#854d0e', bg: '#fef9c3', icon: 'fa-receipt' },
                     { label: appLang === 'vi' ? 'Tổng đầu tư' : 'Invest', count: formatCompact(totalInvest, getDisplayCurrency(), getCachedRates()), color: '#7c3aed', bg: '#f3e8ff', icon: 'fa-coins' }
                 ].map(s => (
-                    <div key={s.label} style={{ background: s.bg, borderRadius: '12px', padding: '10px 4px', textAlign: 'center' }}>
-                        <i className={`fas ${s.icon}`} style={{ fontSize: '16px', color: s.color }}></i>
-                        <div style={{ fontSize: typeof s.count === 'string' ? '12px' : '20px', fontWeight: 800, color: s.color, marginTop: '4px', lineHeight: 1.2 }}>{s.count}</div>
-                        <div style={{ fontSize: '10px', fontWeight: 600, color: s.color, lineHeight: 1.2, marginTop: '2px' }}>{s.label}</div>
+                    <div key={s.label} style={{ flex: 1, minWidth: 0, background: s.bg, borderRadius: '10px', padding: '8px 2px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                        <i className={`fas ${s.icon}`} style={{ fontSize: '14px', color: s.color }}></i>
+                        <div style={{ fontSize: typeof s.count === 'string' ? '10px' : '15px', fontWeight: 800, color: s.color, marginTop: '4px', lineHeight: 1.1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>{s.count}</div>
+                        <div style={{ fontSize: '8px', fontWeight: 700, color: s.color, lineHeight: 1.1, marginTop: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%' }}>{s.label}</div>
                     </div>
                 ))}
             </div>

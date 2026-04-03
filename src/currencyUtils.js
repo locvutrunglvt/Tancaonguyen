@@ -80,6 +80,15 @@ export const formatCompact = (amountVND, targetCurrency, rates) => {
     if (amountVND == null || isNaN(amountVND)) return '0';
     const cur = targetCurrency || 'VND';
     const converted = convertFromVND(Number(amountVND), cur, rates);
-    const fractionDigits = (cur === 'VND' || cur === 'JPY') ? 0 : 2;
-    return converted.toLocaleString('vi-VN', { maximumFractionDigits: fractionDigits }) + ' ' + cur;
+    const fractionDigits = (cur === 'VND' || cur === 'JPY') ? 0 : 1;
+    // For extreme compactness on mobile grids
+    try {
+        return new Intl.NumberFormat('vi-VN', {
+            notation: 'compact',
+            compactDisplay: 'short',
+            maximumFractionDigits: fractionDigits
+        }).format(converted) + ' ' + (cur === 'VND' ? '₫' : cur);
+    } catch {
+        return converted.toLocaleString('vi-VN', { maximumFractionDigits: fractionDigits }) + ' ' + cur;
+    }
 };
