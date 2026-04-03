@@ -1769,9 +1769,10 @@ h3 {
     border: none;
     border-radius: 12px;
     background: transparent;
-    color: #64748b;
-    font-weight: 600;
-    font-size: 14px;
+    color: var(--coffee-dark); /* Thống nhất một màu chữ */
+    font-family: inherit;
+    font-weight: 700; /* Thống nhất độ đậm */
+    font-size: 14px; /* Thống nhất kích cỡ */
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1781,27 +1782,26 @@ h3 {
 }
 
 .mdv-tab-icon {
-    font-size: 18px;
+    font-size: 18px; /* Kích thước icon to rõ */
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .mdv-tab-btn:hover {
-    background: rgba(255, 255, 255, 0.5);
-    color: var(--coffee-dark);
+    background: rgba(255, 255, 255, 0.6);
 }
 
+/* Hiệu ứng 3D đẩy thẻ tab lên khi active */
 .mdv-tab-btn.active {
     background: white;
-    color: var(--coffee-primary);
-    font-weight: 800;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.06);
-    transform: translateY(-2px) scale(1.05);
-    border-bottom: 3px solid var(--coffee-primary);
-    border-radius: 12px 12px 8px 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.06); /* Ranh giới bóng 3D */
+    transform: translateY(-2px) scale(1.05); /* Phóng to thẻ */
+    border-bottom: 4px solid var(--coffee-primary); /* Đường chân thẻ */
+    border-radius: 12px 12px 6px 6px;
 }
 
 .mdv-tab-btn.active .mdv-tab-icon {
-    transform: scale(1.2);
+    transform: scale(1.25); /* Icon to hơn ở tab active */
+    color: var(--coffee-primary); /* Nhấn nhá thêm màu icon để dễ nhìn */
 }
 
 @media (max-width: 768px) {
