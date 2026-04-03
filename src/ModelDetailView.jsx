@@ -98,6 +98,7 @@ const selectStyle = { ...inputStyle, appearance: 'auto' };
 const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit = true }) => {
     const t = translations[appLang] || translations.vi;
     const [activeTab, setActiveTab] = useState('overview');
+    const [farmSubTab, setFarmSubTab] = useState('layer2');
     const [farmer, setFarmer] = useState(null);
     const [farm, setFarm] = useState(null);
     const [members, setMembers] = useState([]);
@@ -659,7 +660,12 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
 
     // ===== TAB CONTENT =====
 
-    const renderOverview = () => (
+    const renderOverview = () => {
+        const diaryCost = diary.reduce((s, d) => s + (d.labor_cost || 0) + (d.material_cost || 0), 0);
+        const consumCost = consumables.reduce((s, c) => s + (c.total_cost || 0), 0);
+        const totalInvest = diaryCost + consumCost;
+
+        return (
         <>
             <SectionCard title={appLang === 'vi' ? 'Thông tin mô hình' : 'Model Info'} icon="fa-seedling">
                 <InfoRow label={appLang === 'vi' ? 'Mã mô hình' : 'Model code'} value={model.model_code} icon="fa-hashtag" />
@@ -723,21 +729,23 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                 </div>
             </SectionCard>
 
-            <div className="mdv-overview-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+            <div className="mdv-overview-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
                 {[
                     { label: appLang === 'vi' ? 'Nhật ký' : 'Diary', count: diary.length, color: '#166534', bg: '#dcfce7', icon: 'fa-book' },
-                    { label: appLang === 'vi' ? 'Kiểm tra' : 'Inspections', count: inspections.length, color: '#1e40af', bg: '#dbeafe', icon: 'fa-clipboard-check' },
-                    { label: appLang === 'vi' ? 'Tiêu hao' : 'Costs', count: consumables.length, color: '#854d0e', bg: '#fef9c3', icon: 'fa-receipt' }
+                    { label: appLang === 'vi' ? 'Kiểm tra' : 'Verify', count: inspections.length, color: '#1e40af', bg: '#dbeafe', icon: 'fa-clipboard-check' },
+                    { label: appLang === 'vi' ? 'Tiêu hao' : 'Costs', count: consumables.length, color: '#854d0e', bg: '#fef9c3', icon: 'fa-receipt' },
+                    { label: appLang === 'vi' ? 'Tổng đầu tư' : 'Invest', count: formatCompact(totalInvest, getDisplayCurrency(), getCachedRates()), color: '#7c3aed', bg: '#f3e8ff', icon: 'fa-coins' }
                 ].map(s => (
-                    <div key={s.label} style={{ background: s.bg, borderRadius: '16px', padding: '16px', textAlign: 'center' }}>
-                        <i className={`fas ${s.icon}`} style={{ fontSize: '20px', color: s.color }}></i>
-                        <div style={{ fontSize: '28px', fontWeight: 800, color: s.color, marginTop: '8px' }}>{s.count}</div>
-                        <div style={{ fontSize: '11px', fontWeight: 600, color: s.color }}>{s.label}</div>
+                    <div key={s.label} style={{ background: s.bg, borderRadius: '12px', padding: '10px 4px', textAlign: 'center' }}>
+                        <i className={`fas ${s.icon}`} style={{ fontSize: '16px', color: s.color }}></i>
+                        <div style={{ fontSize: typeof s.count === 'string' ? '12px' : '20px', fontWeight: 800, color: s.color, marginTop: '4px', lineHeight: 1.2 }}>{s.count}</div>
+                        <div style={{ fontSize: '10px', fontWeight: 600, color: s.color, lineHeight: 1.2, marginTop: '2px' }}>{s.label}</div>
                     </div>
                 ))}
             </div>
         </>
     );
+};
 
     const renderFarmer = () => (
         <>
@@ -892,10 +900,36 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
         </>
     );
 
-    const renderFarm = () => (
+    const renderFarm = () => {
+        const FARM_TABS = [
+            { id: 'layer2', icon: 'fa-file-signature', vi: 'Lớp 2: Pháp lý', en: 'Layer 2' },
+            { id: 'layer3', icon: 'fa-sitemap', vi: 'Lớp 3: Cơ cấu', en: 'Layer 3' },
+            { id: 'layer4', icon: 'fa-flask', vi: 'Lớp 4: Đất', en: 'Layer 4' },
+            { id: 'layer5', icon: 'fa-tint', vi: 'Lớp 5: Nước', en: 'Layer 5' },
+            { id: 'layer6', icon: 'fa-bug', vi: 'Lớp 6: Bảo vệ', en: 'Layer 6' },
+            { id: 'layer7', icon: 'fa-box', vi: 'Lớp 7: Sản xuất', en: 'Layer 7' },
+            { id: 'layer8', icon: 'fa-clipboard-list', vi: 'Lớp 8: Tuân thủ', en: 'Layer 8' },
+            { id: 'plots', icon: 'fa-th-large', vi: 'Mảnh đất con', en: 'Plots' }
+        ];
+
+        return (
         <>
+            <div style={{ display: 'flex', overflowX: 'auto', gap: '8px', paddingBottom: '12px', marginBottom: '16px', borderBottom: '1px solid #e2e8f0', WebkitOverflowScrolling: 'touch' }}>
+                {FARM_TABS.map(tab => (
+                    <button
+                        key={tab.id}
+                        onClick={() => setFarmSubTab(tab.id)}
+                        className={`mdv-tab-btn ${farmSubTab === tab.id ? 'active' : ''}`}
+                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', fontSize: '10px', padding: '6px 2px', minWidth: '70px', lineHeight: 1.2, flexShrink: 0 }}
+                    >
+                        <i className={`fas ${tab.icon} mdv-tab-icon`} style={{ fontSize: '16px', margin: 0 }}></i>
+                        <span>{tab[appLang] || tab.vi}</span>
+                    </button>
+                ))}
+            </div>
+
             {/* ── LAYER 2: Land & Legal ── */}
-            {farm && (
+            {farmSubTab === 'layer2' && farm && (
                 <SectionCard
                     title={appLang === 'vi' ? 'Lớp 2: Đất đai & Pháp lý' : 'Layer 2: Land & Legal'}
                     icon="fa-file-signature"
@@ -916,7 +950,7 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
             )}
 
             {/* ── LAYER 3: Farm Structure ── */}
-            {farm && (
+            {farmSubTab === 'layer3' && farm && (
                 <SectionCard
                     title={appLang === 'vi' ? 'Lớp 3: Cơ cấu trang trại' : 'Layer 3: Farm Structure'}
                     icon="fa-sitemap"
@@ -937,7 +971,7 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
             )}
 
             {/* ── LAYER 4: Soil & Fertility ── */}
-            {farm && (
+            {farmSubTab === 'layer4' && farm && (
                 <SectionCard
                     title={appLang === 'vi' ? 'Lớp 4: Đất & Phì nhiêu' : 'Layer 4: Soil & Fertility'}
                     icon="fa-flask"
@@ -951,7 +985,7 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
             )}
 
             {/* ── LAYER 5: Water & Irrigation ── */}
-            {farm && (
+            {farmSubTab === 'layer5' && farm && (
                 <SectionCard
                     title={appLang === 'vi' ? 'Lớp 5: Nước & Tưới tiêu' : 'Layer 5: Water & Irrigation'}
                     icon="fa-tint"
@@ -965,7 +999,7 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
             )}
 
             {/* ── LAYER 6: Crop Protection ── */}
-            {farm && (
+            {farmSubTab === 'layer6' && farm && (
                 <SectionCard
                     title={appLang === 'vi' ? 'Lớp 6: Bảo vệ cây trồng' : 'Layer 6: Crop Protection'}
                     icon="fa-bug"
@@ -980,7 +1014,7 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
             )}
 
             {/* ── LAYER 7: Production & Yield ── */}
-            {farm && (
+            {farmSubTab === 'layer7' && farm && (
                 <SectionCard
                     title={appLang === 'vi' ? 'Lớp 7: Sản xuất & Năng suất' : 'Layer 7: Production & Yield'}
                     icon="fa-box"
@@ -991,7 +1025,7 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
             )}
 
             {/* ── LAYER 8: Compliance & Traceability ── */}
-            {farm && (
+            {farmSubTab === 'layer8' && farm && (
                 <SectionCard
                     title={appLang === 'vi' ? 'Lớp 8: Tuân thủ & Truy xuất' : 'Layer 8: Compliance & Traceability'}
                     icon="fa-clipboard-list"
@@ -1004,15 +1038,8 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                 </SectionCard>
             )}
 
-            {!farm && (
-                <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
-                    <i className="fas fa-map" style={{ fontSize: '40px', marginBottom: '15px' }}></i>
-                    <p>{appLang === 'vi' ? 'Chưa gán trang trại' : 'No farm assigned yet'}</p>
-                </div>
-            )}
-
             {/* ── Land Plots (all Layer 2-8 data per plot) ── */}
-            {plots.length > 0 && plots.map(p => (
+            {farmSubTab === 'plots' && plots.length > 0 && plots.map(p => (
                 <SectionCard key={p.id}
                     title={`${appLang === 'vi' ? 'Mảnh đất' : 'Plot'}: ${p.plot_name || (appLang === 'vi' ? 'Mảnh đất' : 'Plot')} (${p.area_ha || 0} ha)`}
                     icon="fa-th-large"
@@ -1049,6 +1076,13 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                     <InfoRow label={appLang === 'vi' ? 'Cây xen canh' : 'Intercrop'} value={p.intercrop_species} icon="fa-seedling" />
                 </SectionCard>
             ))}
+
+            {!farm && farmSubTab !== 'plots' && (
+                <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>
+                    <i className="fas fa-map" style={{ fontSize: '40px', marginBottom: '15px' }}></i>
+                    <p>{appLang === 'vi' ? 'Chưa gán trang trại' : 'No farm assigned yet'}</p>
+                </div>
+            )}
 
             {/* ── Farm Edit Modal ── */}
             <ModalOverlay
@@ -1357,7 +1391,8 @@ const ModelDetailView = ({ model, onBack, appLang = 'vi', currentUser, canEdit =
                 </FormField>
             </ModalOverlay>
         </>
-    );
+        );
+    };
 
     // ── DIARY TAB with CRUD ──
     const renderDiary = () => (

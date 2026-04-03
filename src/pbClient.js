@@ -14,7 +14,7 @@ pb.send = async function (path, options) {
     if (res) {
         const stripDate = (obj) => {
             if (typeof obj === 'string') {
-                return obj.replace(/\s(?:12|00):00:00\.000Z$/, '');
+                return obj.replace(/(?: |T)(?:12|07|00):00:00\.000Z$/, '');
             } else if (Array.isArray(obj)) {
                 return obj.map(stripDate);
             } else if (obj !== null && typeof obj === 'object') {

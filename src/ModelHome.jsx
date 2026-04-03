@@ -282,8 +282,8 @@ const ModelHome = ({ onSelectModel, onNavigate, appLang = 'vi', currentUser }) =
                     <button onClick={() => onNavigate('planning')} className="btn-primary" style={{ fontSize: '13px', padding: '8px 16px', background: 'var(--gold-accent)', color: 'var(--coffee-dark)' }}>
                         <i className="fas fa-clipboard-list" style={{ marginRight: '6px' }}></i>{L.finance}
                     </button>
-                    <button onClick={() => onNavigate('settings')} className="btn-primary" style={{ fontSize: '13px', padding: '8px 16px', background: 'var(--gray-500)', color: 'white' }}>
-                        <i className="fas fa-cog" style={{ marginRight: '6px' }}></i>{t.settings || (appLang === 'vi' ? 'Cài đặt' : 'Settings')}
+                    <button onClick={() => onNavigate('settings')} className="btn-primary" style={{ fontSize: '14px', padding: '12px 16px', background: 'linear-gradient(135deg, #475569, #1e293b)', color: 'white', width: '100%', marginTop: '8px', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}>
+                        <i className="fas fa-cog" style={{ marginRight: '6px' }}></i>{t.settings || (appLang === 'vi' ? 'Cài đặt App' : 'Settings')}
                     </button>
                 </div>
             </div>

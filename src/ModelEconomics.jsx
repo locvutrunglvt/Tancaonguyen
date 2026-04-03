@@ -860,9 +860,10 @@ const ModelEconomics = ({ model, appLang = 'vi', canEdit = true }) => {
                         key={tab.id}
                         onClick={() => setSubTab(tab.id)}
                         className={`mdv-tab-btn ${subTab === tab.id ? 'active' : ''}`}
+                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', fontSize: '10px', padding: '6px 2px', minWidth: '70px', lineHeight: 1.2 }}
                     >
-                        <i className={`fas ${tab.icon} mdv-tab-icon`}></i>
-                        {tab[appLang] || tab.vi}
+                        <i className={`fas ${tab.icon} mdv-tab-icon`} style={{ fontSize: '16px', margin: 0 }}></i>
+                        <span>{tab[appLang] || tab.vi}</span>
                     </button>
                 ))}
             </div>
