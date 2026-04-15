@@ -53,23 +53,69 @@ const ExportExcelDialog = ({ show, onClose, currentUser }) => {
         setLoading(true);
         setError('');
         try {
-            // Try demo_models first, fall back to coffee_models
             let records = [];
+            // Try demo_models first
             try {
+                console.log('[ExportExcel] Trying demo_models...');
                 records = await pb.collection('demo_models').getFullList({
-                    sort: 'name', expand: 'farmer_id',
+                    sort: 'model_code', expand: 'farmer_id',
                 });
-            } catch {
-                records = await pb.collection('coffee_models').getFullList({
-                    sort: 'name', expand: 'farmer_id',
-                });
+                console.log('[ExportExcel] demo_models OK:', records.length, 'records');
+            } catch (firstErr) {
+                console.warn('[ExportExcel] demo_models failed:', firstErr.message, firstErr.status);
+                // Try coffee_models as fallback
+                try {
+                    console.log('[ExportExcel] Trying coffee_models...');
+                    records = await pb.collection('coffee_models').getFullList({
+                        sort: 'model_code', expand: 'farmer_id',
+                    });
+                    console.log('[ExportExcel] coffee_models OK:', records.length, 'records');
+                } catch (secondErr) {
+                    console.error('[ExportExcel] coffee_models also failed:', secondErr.message, secondErr.status);
+                    // Last resort: use fetch directly with current auth
+                    try {
+                        console.log('[ExportExcel] Trying direct fetch...');
+                        const token = pb.authStore.token;
+                        const apiBase = `${window.location.origin}/api`;
+                        const res = await fetch(`${apiBase}/collections/demo_models/records?perPage=200&expand=farmer_id&sort=model_code`, {
+                            headers: token ? { Authorization: `Bearer ${token}` } : {},
+                        });
+                        if (res.ok) {
+                            const data = await res.json();
+                            records = data.items || [];
+                            console.log('[ExportExcel] Direct fetch OK:', records.length, 'records');
+                        } else {
+                            console.error('[ExportExcel] Direct fetch failed:', res.status);
+                        }
+                    } catch (fetchErr) {
+                        console.error('[ExportExcel] Direct fetch error:', fetchErr.message);
+                    }
+                    if (records.length === 0) {
+                        // Try coffee_models via direct fetch
+                        try {
+                            const token = pb.authStore.token;
+                            const apiBase = `${window.location.origin}/api`;
+                            const res2 = await fetch(`${apiBase}/collections/coffee_models/records?perPage=200&expand=farmer_id&sort=model_code`, {
+                                headers: token ? { Authorization: `Bearer ${token}` } : {},
+                            });
+                            if (res2.ok) {
+                                const data2 = await res2.json();
+                                records = data2.items || [];
+                                console.log('[ExportExcel] Direct fetch coffee_models OK:', records.length);
+                            }
+                        } catch {}
+                    }
+                }
             }
             setModels(records);
-            if (records.length > 0) setSelectedModelId(records[0].id);
-        } catch (e) {
-            setError(L('Không thể tải danh sách mô hình', 'Cannot load model list') + ': ' + e.message);
-        } finally {
             setLoading(false);
+            if (records.length > 0) {
+                setSelectedModelId(records[0].id);
+            }
+        } catch (e) {
+            console.error('[ExportExcel] Unexpected error:', e.message);
+            setLoading(false);
+            setError(L('Không thể tải danh sách mô hình', 'Cannot load model list') + ': ' + e.message);
         }
     };
 
