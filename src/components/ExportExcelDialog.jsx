@@ -31,8 +31,23 @@ const ExportExcelDialog = ({ show, onClose, currentUser }) => {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        if (show) loadModels();
+        if (show) {
+            loadModels();
+        } else {
+            // Reset state when dialog closes
+            setModels([]);
+            setSelectedModelId('');
+            setError('');
+            setExporting(false);
+        }
     }, [show]);
+
+    // Auto-select first model once models are loaded
+    useEffect(() => {
+        if (models.length > 0 && !selectedModelId) {
+            setSelectedModelId(models[0].id);
+        }
+    }, [models, selectedModelId]);
 
     const loadModels = async () => {
         setLoading(true);
@@ -216,13 +231,20 @@ const ExportExcelDialog = ({ show, onClose, currentUser }) => {
                                 <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#64748b', marginBottom: '6px' }}>
                                     {L('Chọn mô hình', 'Select Model')}
                                 </label>
-                                <select style={sel} value={selectedModelId} onChange={e => setSelectedModelId(e.target.value)}>
+                                <select style={sel} value={selectedModelId} onChange={e => setSelectedModelId(e.target.value)} disabled={loading}>
+                                    <option value="">-- {L('Đang tải...', 'Loading...')} --</option>
                                     {models.map(m => (
                                         <option key={m.id} value={m.id}>
-                                            {m.expand?.farmer_id?.full_name || m.name || m.id}
+                                            {m.model_code || m.name || m.id}
+                                            {m.expand?.farmer_id?.full_name ? ` — ${m.expand.farmer_id.full_name}` : ''}
                                         </option>
                                     ))}
                                 </select>
+                                {models.length === 0 && !loading && (
+                                    <div style={{ fontSize: '11px', color: '#dc2626', marginTop: '4px' }}>
+                                        <i className="fas fa-exclamation-triangle"></i> {L('Không có mô hình nào. Vui lòng tạo mô hình trước.', 'No models found. Please create a model first.')}
+                                    </div>
+                                )}
                             </div>
 
                             <div style={{ marginBottom: '12px' }}>
